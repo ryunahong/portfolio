@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>홍륜아 | 플랫폼 PM</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+
+  <!--
+    ============================================================
+    명명 규칙 (수정 요청 시 이 이름으로 지칭)
+    - 섹션: id="sec-{이름}" / data-section="S{번호}-{이름}"
+      S00-header · S01-intro · S02-skills · S03-career · S04-tools · S05-footer
+    - 회사 블록: id="career-{회사}"  (요약: career-{회사}-summary)
+    - 회사 안 프로젝트: id="career-{회사}-p{번호}"
+    - 프로젝트 상세 항목: id="career-{회사}-p{번호}-{항목}"
+      항목 = overview / background / work / result / learning / figure
+    - 아직 기능(접힘/펼침, PDF 생성 등)은 없음. 디자인만 적용된 상태.
+    ============================================================
+  -->
+  <style>
+    /* ---------- 디자인 토큰 ---------- */
+    :root {
+      --bg: #ffffff;
+      --surface: #f7f8fa;
+      --text: #16181d;
+      --text-sub: #4b5260;
+      --text-muted: #8a909c;
+      --line: #e6e8ec;
+      --line-strong: #16181d;
+      --accent: #3a5bd9;
+      --accent-soft: #eef2fd;
+      --radius: 10px;
+      --maxw: 880px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111317;
+        --surface: #181b21;
+        --text: #eceef2;
+        --text-sub: #b3b9c4;
+        --text-muted: #7c8390;
+        --line: #262a32;
+        --line-strong: #eceef2;
+        --accent: #8aa2ff;
+        --accent-soft: #1c2336;
+      }
+    }
+
+    /* ---------- 기본 ---------- */
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+    body {
+      margin: 0;
+      font-family: "Pretendard Variable", Pretendard, system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.7;
+      letter-spacing: -0.01em;
+      -webkit-font-smoothing: antialiased;
+    }
+    h1, h2, h3, h4, p, ul, figure { margin: 0; }
+    ul { padding: 0; list-style: none; }
+    a { color: inherit; text-decoration: none; }
+    .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+    .placeholder { color: var(--text-muted); }
+
+    /* ---------- S00-header ---------- */
+    #sec-header {
+      position: sticky; top: 0; z-index: 10;
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      backdrop-filter: saturate(180%) blur(12px);
+      -webkit-backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+    #sec-header .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; gap: 16px; }
+    .header-mark { font-weight: 700; font-size: 15px; white-space: nowrap; }
+    #header-nav ul { display: flex; gap: 24px; }
+    #header-nav a { font-size: 14px; color: var(--text-sub); transition: color .15s; }
+    #header-nav a:hover { color: var(--text); }
+    #header-pdf {
+      font-size: 13px; font-weight: 600; padding: 7px 14px; border-radius: 999px;
+      border: 1px solid var(--line); color: var(--text); white-space: nowrap;
+      transition: border-color .15s, background .15s;
+    }
+    #header-pdf:hover { border-color: var(--text); }
+
+    /* ---------- 공통 섹션 ---------- */
+    main section { padding: 72px 0 0; }
+    .sec-title {
+      display: flex; align-items: baseline; gap: 10px;
+      font-size: 20px; font-weight: 700;
+      padding-bottom: 14px; margin-bottom: 8px;
+      border-bottom: 2px solid var(--line-strong);
+    }
+    .sec-title small { font-size: 14px; font-weight: 500; color: var(--text-muted); }
+
+    /* ---------- S01-intro ---------- */
+    #sec-intro { padding-top: 88px; }
+    .intro-eyebrow { font-size: 14px; font-weight: 600; color: var(--accent); margin-bottom: 12px; }
+    #intro-name { font-size: 40px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
+    #intro-role { margin-top: 8px; font-size: 17px; color: var(--text-sub); }
+    #intro-summary { margin-top: 28px; font-size: 18px; line-height: 1.75; max-width: 640px; }
+    #intro-contact { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 28px; font-size: 14px; color: var(--text-sub); }
+    #intro-contact li::before { content: "—"; margin-right: 8px; color: var(--line); }
+    #intro-contact li:first-child::before { content: none; }
+
+    /* ---------- S02-skills ---------- */
+    .skills-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 20px; }
+    .skill-card {
+      padding: 20px 22px; border-radius: var(--radius);
+      background: var(--surface); border: 1px solid transparent;
+      transition: border-color .15s;
+    }
+    .skill-card:hover { border-color: var(--line); }
+    .skill-num { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 0.04em; }
+    .skill-card h3 { margin-top: 6px; font-size: 16px; font-weight: 700; }
+    .skill-card p { margin-top: 6px; font-size: 14px; color: var(--text-sub); }
+
+    /* ---------- S03-career ---------- */
+    .company { padding: 36px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 48px 1fr; gap: 0 20px; }
+    .company:last-child { border-bottom: 0; }
+    .company-logo {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: var(--surface); border: 1px solid var(--line);
+      display: grid; place-items: center;
+      font-size: 13px; font-weight: 700; color: var(--text-muted);
+    }
+    .company-body { min-width: 0; }
+    .company-name { font-size: 19px; font-weight: 700; line-height: 1.4; }
+    .meta { display: flex; flex-wrap: wrap; align-items: center; margin-top: 4px; font-size: 14px; color: var(--text-sub); }
+    .meta span + span::before { content: ""; display: inline-block; width: 1px; height: 11px; background: var(--line); margin: 0 10px; vertical-align: middle; }
+    .company-duties { margin-top: 16px; }
+    .company-duties li { position: relative; padding-left: 14px; font-size: 15px; color: var(--text-sub); }
+    .company-duties li::before { content: ""; position: absolute; left: 0; top: 11px; width: 4px; height: 4px; border-radius: 50%; background: var(--text-muted); }
+
+    .career-projects { margin-top: 24px; display: flex; flex-direction: column; gap: 12px; }
+    .project {
+      border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 22px 24px; background: var(--bg);
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .project:hover { border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); box-shadow: 0 4px 16px -8px rgba(20, 30, 60, .12); }
+    .project-head { display: flex; align-items: flex-start; gap: 10px; }
+    .tag {
+      flex: none; margin-top: 2px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+      padding: 2px 8px; border-radius: 6px;
+      background: var(--accent-soft); color: var(--accent);
+    }
+    .project h4 { font-size: 16px; font-weight: 700; line-height: 1.5; }
+    .project-summary { margin-top: 4px; font-size: 14px; color: var(--text-muted); }
+    .project-detail {
+      margin-top: 18px; padding-top: 18px; border-top: 1px dashed var(--line);
+      display: grid; grid-template-columns: 72px 1fr; gap: 10px 16px; font-size: 14.5px;
+    }
+    .project-detail dt { font-size: 13px; font-weight: 600; color: var(--text-muted); padding-top: 1px; }
+    .project-detail dd { margin: 0; color: var(--text-sub); }
+    .project-detail figure {
+      grid-column: 1 / -1; margin-top: 6px; height: 160px; border-radius: 8px;
+      background: var(--surface); display: grid; place-items: center; font-size: 13px;
+    }
+
+    /* ---------- S04-tools ---------- */
+    .tools-row { display: grid; grid-template-columns: 72px 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); align-items: center; }
+    .tools-row:last-child { border-bottom: 0; }
+    .tools-row h3 { font-size: 14px; font-weight: 600; color: var(--text-muted); }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { font-size: 13px; font-weight: 500; padding: 5px 12px; border-radius: 999px; border: 1px solid var(--line); }
+    .chip.placeholder { border-style: dashed; }
+
+    /* ---------- S05-footer ---------- */
+    #sec-footer { margin-top: 96px; border-top: 1px solid var(--line); padding: 32px 0 48px; }
+    #sec-footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 13px; }
+
+    /* ---------- 반응형 ---------- */
+    @media (max-width: 720px) {
+      body { font-size: 14.5px; }
+      .wrap { padding: 0 16px; }
+      #header-nav { display: none; }
+      #sec-intro { padding-top: 56px; }
+      #intro-name { font-size: 32px; }
+      #intro-summary { font-size: 16px; }
+      main section { padding-top: 56px; }
+      .skills-grid { grid-template-columns: 1fr; }
+      .company { grid-template-columns: 1fr; gap: 14px; }
+      .project { padding: 18px; }
+      .project-detail { grid-template-columns: 1fr; gap: 2px; }
+      .project-detail dd { margin-bottom: 10px; }
+    }
+
+    /* ---------- 인쇄 (PDF) ---------- */
+    @media print {
+      #sec-header { display: none; }
+      body { font-size: 12px; }
+      main section { padding-top: 28px; }
+      .project { break-inside: avoid; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== S00-header : 상단 네비 + PDF 버튼 ========== -->
+  <header id="sec-header" data-section="S00-header">
+    <div class="wrap">
+      <a href="#sec-intro" class="header-mark">홍륜아</a>
+      <nav id="header-nav" aria-label="섹션 이동">
+        <ul>
+          <li><a href="#sec-skills">핵심 역량</a></li>
+          <li><a href="#sec-career">경력 &amp; 프로젝트</a></li>
+          <li><a href="#sec-tools">스킬 &amp; 툴</a></li>
+        </ul>
+      </nav>
+      <a id="header-pdf" href="#">PDF 다운로드</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- ========== S01-intro : 소개 ========== -->
+    <section id="sec-intro" data-section="S01-intro">
+      <p class="intro-eyebrow">Platform PM · Ad Tech · Targeting</p>
+      <h1 id="intro-name">홍륜아</h1>
+      <p id="intro-role">플랫폼 PM · 카카오페이 타겟팅 플랫폼 · <span class="placeholder">[N]년차</span></p>
+      <p id="intro-summary">
+        매체 수익화, 광고 운영, 광고·타겟 플랫폼 기획을 거친 플랫폼 PM입니다.
+        최근에는 타겟팅 플랫폼에 AI 기반 조건 추천 기능을 기획하고 있습니다.
+      </p>
+      <ul id="intro-contact">
+        <li class="placeholder">[이메일]</li>
+        <li class="placeholder">[GitHub]</li>
+        <li class="placeholder">[PDF]</li>
+      </ul>
+    </section>
+
+    <!-- ========== S02-skills : 핵심 역량 4개 ========== -->
+    <section id="sec-skills" data-section="S02-skills">
+      <h2 class="sec-title">핵심 역량</h2>
+      <div class="skills-grid">
+        <article id="skills-ad-ecosystem" class="skill-card">
+          <p class="skill-num">01</p>
+          <h3>광고 생태계 이해 (Supply · Demand)</h3>
+          <p class="placeholder">[한 줄 설명]</p>
+        </article>
+        <article id="skills-ad-platform" class="skill-card">
+          <p class="skill-num">02</p>
+          <h3>광고 플랫폼 기획·설계</h3>
+          <p class="placeholder">[한 줄 설명]</p>
+        </article>
+        <article id="skills-audience" class="skill-card">
+          <p class="skill-num">03</p>
+          <h3>타겟·오디언스 플랫폼</h3>
+          <p class="placeholder">[한 줄 설명]</p>
+        </article>
+        <article id="skills-ai" class="skill-card">
+          <p class="skill-num">04</p>
+          <h3>AI 기능 기획</h3>
+          <p class="placeholder">[한 줄 설명]</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ========== S03-career : 경력 & 프로젝트 (회사별, 최신순) ========== -->
+    <section id="sec-career" data-section="S03-career">
+      <h2 class="sec-title">경력 &amp; 프로젝트 <small class="placeholder">[총 경력 N년 N개월]</small></h2>
+
+      <!-- ----- 회사: 카카오페이 ----- -->
+      <article id="career-kakaopay" class="company">
+        <div class="company-logo" aria-hidden="true">KP</div>
+        <div class="company-body">
+          <div id="career-kakaopay-summary">
+            <h3 class="company-name">카카오페이</h3>
+            <p class="meta"><span class="placeholder">2023.MM – 재직 중</span><span>타겟팅 플랫폼 PM</span></p>
+            <ul class="company-duties">
+              <li>CXM · 타겟서비스(audience_list) 운영</li>
+              <li>셀프서브 타겟 빌더 런칭 및 운영</li>
+              <li>AI 자연어 타겟 조건 추천 기능 기획(진행 중)</li>
+              <li class="placeholder">[주요 성과]</li>
+            </ul>
+          </div>
+
+          <div id="career-kakaopay-projects" class="career-projects">
+            <article id="career-kakaopay-p01" class="project">
+              <div class="project-head">
+                <span class="tag">PM</span>
+                <div>
+                  <h4>AI 기반 타겟 조건 추천</h4>
+                  <p class="project-summary placeholder">[기간 · 역할 · 결과 한 줄]</p>
+                </div>
+              </div>
+              <dl id="career-kakaopay-p01-detail" class="project-detail">
+                <dt>개요</dt><dd id="career-kakaopay-p01-overview" class="placeholder">[개요]</dd>
+                <dt>배경</dt><dd id="career-kakaopay-p01-background" class="placeholder">[배경]</dd>
+                <dt>한 일</dt><dd id="career-kakaopay-p01-work" class="placeholder">[한 일]</dd>
+                <dt>결과</dt><dd id="career-kakaopay-p01-result" class="placeholder">[결과]</dd>
+                <dt>배운 점</dt><dd id="career-kakaopay-p01-learning" class="placeholder">[배운 점]</dd>
+                <figure id="career-kakaopay-p01-figure" class="placeholder">[구조도 또는 화면]</figure>
+              </dl>
+            </article>
+
+            <article id="career-kakaopay-p02" class="project">
+              <div class="project-head">
+                <span class="tag">PM</span>
+                <div>
+                  <h4>셀프서브 타겟 빌더 런칭과 타겟 플랫폼 통합</h4>
+                  <p class="project-summary placeholder">[기간 · 역할 · 결과 한 줄]</p>
+                </div>
+              </div>
+              <dl id="career-kakaopay-p02-detail" class="project-detail">
+                <dt>개요</dt><dd id="career-kakaopay-p02-overview" class="placeholder">[개요]</dd>
+                <dt>배경</dt><dd id="career-kakaopay-p02-background" class="placeholder">[배경]</dd>
+                <dt>한 일</dt><dd id="career-kakaopay-p02-work" class="placeholder">[한 일]</dd>
+                <dt>결과</dt><dd id="career-kakaopay-p02-result" class="placeholder">[결과]</dd>
+                <dt>배운 점</dt><dd id="career-kakaopay-p02-learning" class="placeholder">[배운 점]</dd>
+                <figure id="career-kakaopay-p02-figure" class="placeholder">[구조도 또는 화면]</figure>
+              </dl>
+            </article>
+          </div>
+        </div>
+      </article>
+
+      <!-- ----- 회사 C: 광고 플랫폼 PM ----- -->
+      <article id="career-company-c" class="company">
+        <div class="company-logo" aria-hidden="true">C</div>
+        <div class="company-body">
+          <div id="career-company-c-summary">
+            <h3 class="company-name placeholder">[회사 C]</h3>
+            <p class="meta"><span class="placeholder">[기간]</span><span>광고 플랫폼 PM</span></p>
+            <ul class="company-duties">
+              <li class="placeholder">[담당 업무 3~4개 / 주요 성과]</li>
+            </ul>
+          </div>
+
+          <div id="career-company-c-projects" class="career-projects">
+            <article id="career-company-c-p01" class="project">
+              <div class="project-head">
+                <span class="tag">PM</span>
+                <div>
+                  <h4 class="placeholder">[광고 플랫폼 기획 프로젝트 — 선정 필요]</h4>
+                  <p class="project-summary placeholder">[기간 · 역할 · 결과 한 줄]</p>
+                </div>
+              </div>
+              <dl id="career-company-c-p01-detail" class="project-detail">
+                <dt>개요</dt><dd id="career-company-c-p01-overview" class="placeholder">[개요]</dd>
+                <dt>배경</dt><dd id="career-company-c-p01-background" class="placeholder">[배경]</dd>
+                <dt>한 일</dt><dd id="career-company-c-p01-work" class="placeholder">[한 일]</dd>
+                <dt>결과</dt><dd id="career-company-c-p01-result" class="placeholder">[결과]</dd>
+                <dt>배운 점</dt><dd id="career-company-c-p01-learning" class="placeholder">[배운 점]</dd>
+                <figure id="career-company-c-p01-figure" class="placeholder">[구조도 또는 화면]</figure>
+              </dl>
+            </article>
+          </div>
+        </div>
+      </article>
+
+      <!-- ----- 회사 B: SNS 광고 운영 (프로젝트 카드 없음) ----- -->
+      <article id="career-company-b" class="company">
+        <div class="company-logo" aria-hidden="true">B</div>
+        <div class="company-body">
+          <div id="career-company-b-summary">
+            <h3 class="company-name placeholder">[회사 B]</h3>
+            <p class="meta"><span class="placeholder">[기간]</span><span>SNS 광고 운영</span></p>
+            <ul class="company-duties">
+              <li class="placeholder">[담당 업무 3~4개 / 주요 성과]</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <!-- ----- 회사 A: 애드 옵스 (매체 수익화) ----- -->
+      <article id="career-company-a" class="company">
+        <div class="company-logo" aria-hidden="true">A</div>
+        <div class="company-body">
+          <div id="career-company-a-summary">
+            <h3 class="company-name placeholder">[회사 A]</h3>
+            <p class="meta"><span class="placeholder">[기간]</span><span>애드 옵스 (매체 수익화)</span></p>
+            <ul class="company-duties">
+              <li>매체 수익화 · SSP 구조 운영</li>
+              <li class="placeholder">[주요 성과]</li>
+            </ul>
+          </div>
+
+          <div id="career-company-a-projects" class="career-projects">
+            <article id="career-company-a-p01" class="project">
+              <div class="project-head">
+                <span class="tag">PM</span>
+                <div>
+                  <h4>사내 SSP 광고 서버 구축</h4>
+                  <p class="project-summary placeholder">[기간 · 역할 · 결과 한 줄]</p>
+                </div>
+              </div>
+              <dl id="career-company-a-p01-detail" class="project-detail">
+                <dt>개요</dt><dd id="career-company-a-p01-overview" class="placeholder">[개요]</dd>
+                <dt>배경</dt><dd id="career-company-a-p01-background" class="placeholder">[배경]</dd>
+                <dt>한 일</dt><dd id="career-company-a-p01-work" class="placeholder">[한 일]</dd>
+                <dt>결과</dt><dd id="career-company-a-p01-result" class="placeholder">[결과]</dd>
+                <dt>배운 점</dt><dd id="career-company-a-p01-learning" class="placeholder">[배운 점]</dd>
+                <figure id="career-company-a-p01-figure" class="placeholder">[구조도 또는 화면]</figure>
+              </dl>
+            </article>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- ========== S04-tools : 스킬 & 툴 ========== -->
+    <section id="sec-tools" data-section="S04-tools">
+      <h2 class="sec-title">스킬 &amp; 툴</h2>
+      <div id="tools-planning" class="tools-row">
+        <h3>기획</h3>
+        <div class="chips"><span class="chip">API 설계</span><span class="chip">JSON Schema</span><span class="chip">SQL</span><span class="chip placeholder">추가</span></div>
+      </div>
+      <div id="tools-collab" class="tools-row">
+        <h3>협업</h3>
+        <div class="chips"><span class="chip placeholder">Jira</span><span class="chip placeholder">Confluence</span></div>
+      </div>
+      <div id="tools-ai" class="tools-row">
+        <h3>AI</h3>
+        <div class="chips"><span class="chip placeholder">사용 중인 AI 도구</span></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== S05-footer : 연락처 · 최종 수정일 ========== -->
+  <footer id="sec-footer" data-section="S05-footer">
+    <div class="wrap">
+      <p id="footer-contact" class="placeholder">[이메일 · GitHub]</p>
+      <p id="footer-updated" class="placeholder">최종 수정 [YYYY-MM-DD]</p>
+    </div>
+  </footer>
+
+</body>
+</html>

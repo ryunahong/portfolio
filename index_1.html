@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>홍륜아 | 플랫폼 PM</title>
+
+  <!--
+    ============================================================
+    구조 확인용 와이어프레임 (기능 미구현)
+    - 섹션 명명 규칙: id="sec-{이름}" / data-section="S{번호}-{이름}"
+    - 하위 블록 명명: id="{섹션}-{항목}" (예: career-kakaopay, project-01)
+    - 수정 요청 시 data-section 값으로 지칭하면 됩니다. (예: "S03-career 수정")
+    - 아래 <style>은 구조 확인용 최소 스타일이며, 디자인 단계에서 교체합니다.
+    ============================================================
+  -->
+  <style>
+    :root { --line: #b8bcc6; --label: #5b6270; --bg: #ffffff; --text: #1d2129; }
+    @media (prefers-color-scheme: dark) {
+      :root { --line: #4a505c; --label: #9aa1ad; --bg: #16181d; --text: #e6e8ec; }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, "Pretendard", sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    main, header, footer { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+    [data-section] { position: relative; border: 1px dashed var(--line); border-radius: 8px; padding: 40px 20px 20px; margin: 24px 0; }
+    [data-section]::before { content: attr(data-section); position: absolute; top: 8px; left: 12px; font: 12px/1 ui-monospace, monospace; color: var(--label); }
+    [data-block] { border: 1px dotted var(--line); border-radius: 6px; padding: 28px 14px 12px; margin: 12px 0; position: relative; }
+    [data-block]::before { content: attr(data-block); position: absolute; top: 6px; left: 10px; font: 11px/1 ui-monospace, monospace; color: var(--label); }
+    .placeholder { color: var(--label); font-style: italic; }
+    nav ul { display: flex; flex-wrap: wrap; gap: 12px; list-style: none; padding: 0; margin: 0; }
+  </style>
+</head>
+<body>
+
+  <!-- ========== S00-header : 상단 네비 + PDF 버튼 ========== -->
+  <header id="sec-header" data-section="S00-header">
+    <nav id="header-nav" aria-label="섹션 이동">
+      <ul>
+        <li><a href="#sec-intro">소개</a></li>
+        <li><a href="#sec-skills">핵심 역량</a></li>
+        <li><a href="#sec-career">경력</a></li>
+        <li><a href="#sec-projects">주요 프로젝트</a></li>
+        <li><a href="#sec-tools">스킬 &amp; 툴</a></li>
+      </ul>
+    </nav>
+    <a id="header-pdf" href="#" class="placeholder">[PDF 다운로드 버튼]</a>
+  </header>
+
+  <main>
+
+    <!-- ========== S01-intro : 소개 ========== -->
+    <section id="sec-intro" data-section="S01-intro">
+      <h1 id="intro-name">홍륜아</h1>
+      <p id="intro-role">플랫폼 PM · 카카오페이 타겟팅 플랫폼 · <span class="placeholder">[N]년차</span></p>
+      <p id="intro-summary">
+        매체 수익화, 광고 운영, 광고·타겟 플랫폼 기획을 거친 플랫폼 PM입니다.
+        최근에는 타겟팅 플랫폼에 AI 기반 조건 추천 기능을 기획하고 있습니다.
+      </p>
+      <ul id="intro-contact">
+        <li class="placeholder">[이메일]</li>
+        <li class="placeholder">[GitHub 링크]</li>
+        <li class="placeholder">[PDF 링크]</li>
+      </ul>
+    </section>
+
+    <!-- ========== S02-skills : 핵심 역량 4개 ========== -->
+    <section id="sec-skills" data-section="S02-skills">
+      <h2>핵심 역량</h2>
+
+      <article id="skills-ad-ecosystem" data-block="skills-ad-ecosystem">
+        <h3>광고 생태계 이해 (Supply · Demand)</h3>
+        <p class="placeholder">[한 줄 설명] → 관련: career-company-a, project-03</p>
+      </article>
+
+      <article id="skills-ad-platform" data-block="skills-ad-platform">
+        <h3>광고 플랫폼 기획·설계</h3>
+        <p class="placeholder">[한 줄 설명] → 관련: project-03, project-04</p>
+      </article>
+
+      <article id="skills-audience" data-block="skills-audience">
+        <h3>타겟·오디언스 플랫폼</h3>
+        <p class="placeholder">[한 줄 설명] → 관련: project-02</p>
+      </article>
+
+      <article id="skills-ai" data-block="skills-ai">
+        <h3>AI 기능 기획</h3>
+        <p class="placeholder">[한 줄 설명] → 관련: project-01</p>
+      </article>
+    </section>
+
+    <!-- ========== S03-career : 경력 (최신순) ========== -->
+    <section id="sec-career" data-section="S03-career">
+      <h2>경력</h2>
+
+      <article id="career-kakaopay" data-block="career-kakaopay">
+        <h3>카카오페이 · 타겟팅 플랫폼 PM</h3>
+        <p class="placeholder">[기간: 2023.MM ~ 현재]</p>
+        <ul>
+          <li>CXM · 타겟서비스(audience_list) 운영</li>
+          <li>셀프서브 타겟 빌더 런칭 및 운영</li>
+          <li>AI 자연어 타겟 조건 추천 기능 기획(진행 중)</li>
+          <li class="placeholder">[주요 성과]</li>
+        </ul>
+      </article>
+
+      <article id="career-company-c" data-block="career-company-c">
+        <h3 class="placeholder">[회사 C] · 광고 플랫폼 PM</h3>
+        <p class="placeholder">[기간]</p>
+        <ul><li class="placeholder">[담당 업무 3~4개 / 주요 성과]</li></ul>
+      </article>
+
+      <article id="career-company-b" data-block="career-company-b">
+        <h3 class="placeholder">[회사 B] · SNS 광고 운영</h3>
+        <p class="placeholder">[기간]</p>
+        <ul><li class="placeholder">[담당 업무 3~4개 / 주요 성과]</li></ul>
+      </article>
+
+      <article id="career-company-a" data-block="career-company-a">
+        <h3 class="placeholder">[회사 A] · 애드 옵스 (매체 수익화)</h3>
+        <p class="placeholder">[기간]</p>
+        <ul>
+          <li>매체 수익화 · SSP 구조 운영</li>
+          <li>사내 SSP 광고 서버 구축</li>
+          <li class="placeholder">[주요 성과]</li>
+        </ul>
+      </article>
+    </section>
+
+    <!-- ========== S04-projects : 주요 프로젝트 (공통 틀: 개요/배경/한 일/결과/배운 점/그림) ========== -->
+    <section id="sec-projects" data-section="S04-projects">
+      <h2>주요 프로젝트</h2>
+
+      <article id="project-01" data-block="project-01 · AI 타겟 조건 추천">
+        <h3>AI 기반 타겟 조건 추천</h3>
+        <p class="placeholder">[카드 요약: 카카오페이 · 기간 · 역할 · 결과 한 줄]</p>
+        <div id="project-01-detail" data-block="project-01-detail">
+          <p id="project-01-overview" class="placeholder">[개요]</p>
+          <p id="project-01-background" class="placeholder">[배경]</p>
+          <p id="project-01-work" class="placeholder">[한 일]</p>
+          <p id="project-01-result" class="placeholder">[결과]</p>
+          <p id="project-01-learning" class="placeholder">[배운 점]</p>
+          <figure id="project-01-figure" class="placeholder">[구조도 또는 화면]</figure>
+        </div>
+      </article>
+
+      <article id="project-02" data-block="project-02 · 셀프서브 타겟 빌더">
+        <h3>셀프서브 타겟 빌더 런칭과 타겟 플랫폼 통합</h3>
+        <p class="placeholder">[카드 요약: 카카오페이 · 기간 · 역할 · 결과 한 줄]</p>
+        <div id="project-02-detail" data-block="project-02-detail">
+          <p id="project-02-overview" class="placeholder">[개요]</p>
+          <p id="project-02-background" class="placeholder">[배경]</p>
+          <p id="project-02-work" class="placeholder">[한 일]</p>
+          <p id="project-02-result" class="placeholder">[결과]</p>
+          <p id="project-02-learning" class="placeholder">[배운 점]</p>
+          <figure id="project-02-figure" class="placeholder">[구조도 또는 화면]</figure>
+        </div>
+      </article>
+
+      <article id="project-03" data-block="project-03 · 사내 SSP 광고 서버">
+        <h3>사내 SSP 광고 서버 구축</h3>
+        <p class="placeholder">[카드 요약: 회사 A · 기간 · 역할 · 결과 한 줄]</p>
+        <div id="project-03-detail" data-block="project-03-detail">
+          <p id="project-03-overview" class="placeholder">[개요]</p>
+          <p id="project-03-background" class="placeholder">[배경]</p>
+          <p id="project-03-work" class="placeholder">[한 일]</p>
+          <p id="project-03-result" class="placeholder">[결과]</p>
+          <p id="project-03-learning" class="placeholder">[배운 점]</p>
+          <figure id="project-03-figure" class="placeholder">[구조도 또는 화면]</figure>
+        </div>
+      </article>
+
+      <article id="project-04" data-block="project-04 · 광고 플랫폼 기획 (선정 필요)">
+        <h3 class="placeholder">[광고 플랫폼 기획 프로젝트 — 선정 필요]</h3>
+        <p class="placeholder">[카드 요약: 회사 C · 기간 · 역할 · 결과 한 줄]</p>
+        <div id="project-04-detail" data-block="project-04-detail">
+          <p id="project-04-overview" class="placeholder">[개요]</p>
+          <p id="project-04-background" class="placeholder">[배경]</p>
+          <p id="project-04-work" class="placeholder">[한 일]</p>
+          <p id="project-04-result" class="placeholder">[결과]</p>
+          <p id="project-04-learning" class="placeholder">[배운 점]</p>
+          <figure id="project-04-figure" class="placeholder">[구조도 또는 화면]</figure>
+        </div>
+      </article>
+    </section>
+
+    <!-- ========== S05-tools : 스킬 & 툴 ========== -->
+    <section id="sec-tools" data-section="S05-tools">
+      <h2>스킬 &amp; 툴</h2>
+      <div id="tools-planning" data-block="tools-planning">
+        <h3>기획</h3>
+        <p>API 설계 · JSON Schema · SQL <span class="placeholder">[추가]</span></p>
+      </div>
+      <div id="tools-collab" data-block="tools-collab">
+        <h3>협업</h3>
+        <p class="placeholder">[Jira · Confluence 등]</p>
+      </div>
+      <div id="tools-ai" data-block="tools-ai">
+        <h3>AI</h3>
+        <p class="placeholder">[사용 중인 AI 도구]</p>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== S06-footer : 연락처 · 최종 수정일 ========== -->
+  <footer id="sec-footer" data-section="S06-footer">
+    <p id="footer-contact" class="placeholder">[이메일 · GitHub]</p>
+    <p id="footer-updated" class="placeholder">[최종 수정일: YYYY-MM-DD]</p>
+  </footer>
+
+</body>
+</html>
