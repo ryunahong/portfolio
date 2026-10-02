@@ -235,17 +235,6 @@
     .more-projects { display: grid; grid-template-columns: 104px 1fr; gap: 12px; align-items: start; padding: 14px 4px 0; }
     .more-projects h5 { margin: 0; padding-top: 5px; white-space: nowrap; font-size: 13px; font-weight: 600; color: var(--text-muted); }
 
-    /* 접이식 산출물 */
-    .fig-toggle { margin-top: 16px; }
-    .fig-toggle summary { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; list-style: none; font-size: 13px; font-weight: 600; color: var(--accent); }
-    .fig-toggle summary::-webkit-details-marker { display: none; }
-    .fig-toggle summary::before { content: "+"; font-weight: 700; }
-    .fig-toggle[open] summary::before { content: "−"; }
-    .fig-toggle > figure { margin-top: 12px; }
-    .fig-toggle figure.flow-figure { padding: 20px; background: var(--surface); border-radius: 8px; }
-    .shot-figure img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 8px; background: #fff; }
-    .shot-figure figcaption { margin-top: 8px; font-size: 13px; color: var(--text-muted); }
-
     /* ---------- S04-tools ---------- */
     .tools-row { display: grid; grid-template-columns: 88px 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); align-items: center; }
     .tools-row:last-child { border-bottom: 0; }
@@ -256,7 +245,7 @@
 
     /* ---------- S05-footer ---------- */
     #sec-footer { margin-top: 96px; border-top: 1px solid var(--line); padding: 32px 0 48px; }
-    #sec-footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 13px; color: var(--text-muted); }
+    #sec-footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 13px; }
 
     /* ---------- 반응형 ---------- */
     @media (max-width: 720px) {
@@ -284,7 +273,6 @@
 
     /* ---------- 인쇄 (PDF) ---------- */
     @media print {
-      .fig-toggle { display: none; }
       #sec-header { display: none; }
       body { font-size: 12px; }
       main section { padding-top: 28px; }
@@ -381,41 +369,97 @@
               <li>타겟팅 플랫폼(CXM · 타겟서비스) 기획 및 운영</li>
               <li>셀프서브 타겟 빌더 '타겟서비스' 기획, 레거시 CXM 종료·전환 로드맵 수립</li>
               <li>자연어 기반 AI 타겟조건 탐색·추천 기능 기획 (개발 중)</li>
+              <li>빌더 로직으로 기존 CXM 유즈케이스의 약 65% 처리 가능 확인 (2026.04 기준)</li>
               <li>광고 인벤토리 관리 플랫폼 출시·고도화 (인벤토리 규격 JSON Schema 정의), CMS 운영 기획</li>
             </ul>
           </div>
 
           <div id="career-kakaopay-projects" class="career-projects">
 
+            <!-- 프로젝트 p01: 타겟서비스 (플랫폼 기반) -->
             <article id="career-kakaopay-p01" class="project">
               <div class="project-head">
                 <span class="tag">PM</span>
                 <div>
-                  <h4>타겟서비스 — 셀프서브 타겟 빌더</h4>
-                  <p class="project-meta">출시·운영 중 · 서비스 기획, 전환 로드맵</p>
-                  <div class="metrics"><span class="metric">타겟조건 <b>약 5만 개</b></span><span class="metric">카테고리 약 5천 개</span></div>
+                  <h4>타겟서비스 — 데이터 비전문가를 위한 셀프서브 타겟 빌더</h4>
+                  <p class="project-summary">마케터 → BDA 쿼리 요청 → 수동 등록으로 이어지던 레거시(CXM) 프로세스를, 빌더 UI만으로 조건 탐색부터 목록 추출까지 끝내는 셀프서브 플랫폼으로 전환</p>
                 </div>
               </div>
               <dl id="career-kakaopay-p01-detail" class="project-detail">
                 <dt>개요</dt>
-                <dd id="career-kakaopay-p01-overview">마케터 → BDA 쿼리 요청 → 수동 등록으로 이어지던 레거시(CXM) 프로세스를, SQL 없이 빌더 UI만으로 조건 탐색부터 목록 추출까지 끝내는 셀프서브 타겟팅 플랫폼으로 전환</dd>
-                <dt>한 일</dt>
-                <dd id="career-kakaopay-p01-work">
+                <dd id="career-kakaopay-p01-overview">사내 데이터 비전문가(PM, 마케터 등)가 SQL 지식 없이 타겟조건을 탐색·조합하고, 대상 목록을 추출·활용하는 타겟팅 플랫폼. 빌더 UI에서 선택한 필터가 SQL로 변환되는 구조</dd>
+
+                <dt>역할</dt>
+                <dd id="career-kakaopay-p01-role">
                   <ul class="dot-list">
-                    <li>서비스 구조·필터 체계·활용 정책 기획, CXM 종료 및 통합 전환 로드맵 수립</li>
-                    <li>상대기간, 람다함수(ANY_MATCH), 리타겟/디타겟, 정렬/랭크 등 복잡한 쿼리 로직을 UI로 제품화</li>
-                    <li>동일 테이블 조건 병합, 파티션키 필수화, null guard, 풀스캔 사전 차단 등 쿼리 안전장치 설계</li>
-                    <li>메시지·오퍼 등 활용 플랫폼에 빌더를 임베드하고 목록 추출·다운로드·API 제공</li>
+                    <li>서비스 기획 (빌더 구조, 필터 체계, 활용 정책)</li>
+                    <li>필터 내부의 복잡한 쿼리 로직 기획 및 UI화</li>
+                    <li>레거시 플랫폼(CXM) 종료 및 타겟서비스 전환 로드맵 수립</li>
                   </ul>
                 </dd>
+
+                <dt>배경</dt>
+                <dd id="career-kakaopay-p01-background">
+                  <ul class="key-list">
+                    <li><b>운영 병목</b>조건 쿼리화 요청 → BDA 쿼리 작성 → 사용자가 쿼리를 복사해 수동 등록. BDA 의존도가 높고 리드타임이 김</li>
+                    <li><b>데이터 탐색</b>사내 DB·테이블·컬럼 경로를 사용자가 직접 파악해야 함</li>
+                    <li><b>휴먼 에러</b>필터별 입력 가이드 부재 (예: 날짜 형식 yyyymmdd / yyyy-mm-dd 혼동)</li>
+                    <li><b>표현력</b>단순 조건만 UI 제공, 조금만 복잡해도 쿼리 직접 입력 필요</li>
+                    <li><b>안정성</b>Impala/Trino 혼용, 레거시 엔진 한계로 쿼리 타임아웃·실패 빈번</li>
+                    <li><b>업무 동선</b>메시지 발송 등 실제 활용처와 어드민이 분리되어 맥락 단절</li>
+                  </ul>
+                </dd>
+
+                <dt>한 일</dt>
+                <dd id="career-kakaopay-p01-work">
+                  <div class="work-group">
+                    <h5>복잡한 쿼리 로직의 UI화</h5>
+                    <ul class="dot-list">
+                      <li>상대기간: '최근 N일'로 설정, 실행 시점 기준 기간 자동 계산</li>
+                      <li>epoch 변환: epoch 값을 날짜로 변환 후 조건 적용</li>
+                      <li>람다함수(ANY_MATCH): array 타입 데이터도 IN / NOT IN처럼 설정</li>
+                      <li>리타겟/디타겟: 이력 데이터 기반 포함·제외 설정</li>
+                      <li>%LIKE% 부분 매칭, 정렬/랭크(상위 N명·N%) 필터링</li>
+                    </ul>
+                  </div>
+                  <div class="work-group">
+                    <h5>쿼리 최적화·안전장치</h5>
+                    <ul class="dot-list">
+                      <li>동일 테이블 조건 자동 병합 (이력성 테이블은 결과 왜곡 방지를 위해 분기 처리)</li>
+                      <li>파티션키 필수 설정, 테이블별 null 정책에 따른 null guard</li>
+                      <li>조건 설정·저장 시점마다 쿼리 플랜을 체크해 풀스캔 쿼리 사전 차단</li>
+                    </ul>
+                  </div>
+                  <div class="work-group">
+                    <h5>활용 정확도·정책</h5>
+                    <ul class="dot-list">
+                      <li>필터별 플레이스홀더·디스크립션, 데이터 타입에 맞는 UI 컴포넌트 제공</li>
+                      <li>설치 환경별·활용 목적별 약관 강제 적용 (기본 ON)</li>
+                      <li>Trino 단일 엔진으로 표준화</li>
+                    </ul>
+                  </div>
+                  <div class="work-group">
+                    <h5>플랫폼 구조</h5>
+                    <ul class="dot-list">
+                      <li>메시지·오퍼 등 활용 플랫폼에 빌더를 임베드해 업무 동선 통합</li>
+                      <li>목록 추출·파일 다운로드(CSV/XLSX)·API, 추출 이력 관리</li>
+                      <li>실시간 타겟 판단용 데이터 배치 자동화(HBase 대체), 비트맵 기반 데이터 일원화로 추출-배치 간 모수 정합성 확보</li>
+                    </ul>
+                  </div>
+                </dd>
+
                 <dt>결과</dt>
-                <dd id="career-kakaopay-p01-result">데이터 비전문가가 빌더만으로 조건 탐색부터 목록 추출까지 직접 수행. CXM 통합 전환 진행 중</dd>
+                <dd id="career-kakaopay-p01-result">
+                  <ul class="dot-list">
+                    <li>현재 빌더 로직으로 <strong>기존 CXM 유즈케이스의 약 65%</strong> 처리 가능 확인 (2026.04 기준, LIKE 배포 시 확대)</li>
+                    <li>CXM 어드민 종료 및 타겟서비스 통합 전환 진행 중</li>
+                  </ul>
+                </dd>
+
                 <dt>배운 점</dt>
-                <dd id="career-kakaopay-p01-learning">비전문가용 데이터 도구는 표현력보다 잘못된 쿼리가 나오지 않는 구조가 먼저라는 것. 안전장치를 갖춘 뒤에야 조건의 표현 범위를 넓힐 수 있음</dd>
-              </dl>
-                <details class="fig-toggle">
-                  <summary>흐름도 보기</summary>
-                  <figure id="career-kakaopay-p01-figure" class="flow-figure">
+                <dd id="career-kakaopay-p01-learning" class="placeholder">[배운 점]</dd>
+
+                <figure id="career-kakaopay-p01-figure" class="flow-figure">
                   <div class="flow-scroll">
                     <svg viewBox="0 0 640 196" role="img" aria-label="기존 CXM과 타겟서비스의 타겟 추출 과정 비교">
                       <defs>
@@ -440,38 +484,97 @@
                   </div>
                   <figcaption>BDA를 거치던 요청·작성·등록 단계를 빌더 안의 셀프서브 흐름으로 대체</figcaption>
                 </figure>
-                </details>
+              </dl>
             </article>
 
+            <!-- 프로젝트 p02: AI 기반 타겟조건 탐색·추천 (p01 위에 AI 적용) -->
             <article id="career-kakaopay-p02" class="project">
               <div class="project-head">
                 <span class="tag">PM</span>
                 <div>
                   <h4>AI 기반 타겟조건 탐색·추천 <span class="status">개발 중</span></h4>
-                  <p class="project-meta">기능 기획 · 추천 정책, 사용자 플로우, 운영 구조</p>
-                  <div class="metrics"><span class="metric">Text-to-SQL 대신 <b>검증된 필터 추천</b></span><span class="metric">Human-in-the-loop</span></div>
+                  <p class="project-summary">자연어 입력을 표준화된 SQL 필터 단위(필터 + 연산자 + 값)로 매핑해 추천. AI가 SQL을 직접 생성하지 않고 검증된 필터만 추천하도록 설계</p>
                 </div>
               </div>
               <dl id="career-kakaopay-p02-detail" class="project-detail">
                 <dt>개요</dt>
-                <dd id="career-kakaopay-p02-overview">원하는 타겟을 자연어로 입력하면 약 5만 개 타겟조건 중 적합한 것을 필터 + 연산자 + 값 단위로 추천하는 기능</dd>
-                <dt>한 일</dt>
-                <dd id="career-kakaopay-p02-work">
+                <dd id="career-kakaopay-p02-overview">빌더 사용자가 원하는 타겟을 자연어로 입력하면, 타겟서비스에 등록된 SQL 필터 중 적합한 것을 찾아 필터 + 연산자 + 값 단위의 타겟조건으로 추천하는 기능</dd>
+
+                <dt>역할</dt>
+                <dd id="career-kakaopay-p02-role">기능 기획 — 추천 정책, 사용자 플로우, 운영 구조 설계</dd>
+
+                <dt>배경</dt>
+                <dd id="career-kakaopay-p02-background">
                   <ul class="dot-list">
-                    <li>AI가 SQL을 생성하지 않고 검증된 필터만 추천하도록 설계해 존재하지 않는 테이블·컬럼 생성을 차단</li>
-                    <li>유사도 75% 미만이면 추천 불가로 응답, 후보가 여럿이면 모두 제시, 값이 불명확하면 빈칸으로 두는 응답 정책</li>
-                    <li>AI는 후보만 제시하고 최종 선택은 사용자가 하는 플로우 설계</li>
-                    <li>요청·응답 로깅(Langfuse), 프롬프트 버전 관리, 임베딩 갱신, 추천 불가 키워드 기반 필터 확장 루프 설계</li>
+                    <li>카테고리 4,752개, SQL 필터 46,922개 규모로 계속 증가 → 사람이 검색해서 찾는 방식은 한계</li>
+                    <li>CXM 종료 이후, 조건을 못 찾아 BDA에 다시 쿼리를 요청하는 상황을 줄여야 함</li>
+                    <li>표준화된 SQL 필터 사용을 최대화하고, 필터로 소화할 수 없는 케이스에만 raw SQL을 허용하는 활용 정책</li>
                   </ul>
                 </dd>
+
+                <dt>한 일</dt>
+                <dd id="career-kakaopay-p02-work">
+                  <div class="work-group">
+                    <h5>AI가 SQL을 생성하지 않고, 검증된 필터를 추천</h5>
+                    <ul class="dot-list">
+                      <li>Text-to-SQL 대신 표준화·검증된 필터로 매핑해 존재하지 않는 테이블·컬럼 생성을 원천 차단</li>
+                      <li>빌더의 쿼리 최적화·null guard·약관 정책이 AI 추천 조건에도 그대로 적용</li>
+                    </ul>
+                  </div>
+                  <div class="work-group">
+                    <h5>최종 결정은 사용자 (Human-in-the-loop)</h5>
+                    <ul class="dot-list">
+                      <li>AI는 후보만 제시하고 사용자가 확인 후 선택해 조합에 추가</li>
+                      <li>논리 연산, 약관, 정렬/랭크, 모수 제한은 기존 빌더에서 이어서 설정</li>
+                    </ul>
+                  </div>
+                  <div class="work-group">
+                    <h5>불확실성에 따른 응답 정책</h5>
+                    <table class="mini-table">
+                      <tbody>
+                        <tr><th>유사도 75% 이상 필터 존재</th><td>추천 가능 조건으로 판단</td></tr>
+                        <tr><th>75% 이상 후보 없음</th><td>'추천 불가'로 응답 (억지로 매핑하지 않음)</td></tr>
+                        <tr><th>후보가 여러 개</th><td>모두 제공 (예: '30대' → 연나이·만나이·연령대)</td></tr>
+                        <tr><th>값이 명확함</th><td>값까지 채우되 수정 가능 (예: 거주지 = 서울시)</td></tr>
+                        <tr><th>값이 불명확함</th><td>필터만 추천, 값은 빈칸 (예: 가맹점 CID = { })</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="work-group">
+                    <h5>지속 개선이 가능한 운영 구조</h5>
+                    <ul class="dot-list">
+                      <li>채팅 ID 단위 요청·응답 로깅 (Langfuse 연동)</li>
+                      <li>'추천 불가' 키워드를 모아 신규 필터 우선순위에 반영하는 필터 확장 루프</li>
+                      <li>임베딩 갱신: 야간 배치 전체 재색인 + 변경 시 즉시 반영, 모델 교체에 대응하도록 임베딩 모델 비고정</li>
+                      <li>프롬프트 버전 관리·롤백, 지식베이스 검색 결과를 런타임에 주입하는 RAG 구조</li>
+                    </ul>
+                  </div>
+                  <div class="work-group">
+                    <h5>단계별 범위</h5>
+                    <table class="mini-table">
+                      <tbody>
+                        <tr><th>Phase 1</th><td>싱글턴 추천, 로깅, 임베딩·프롬프트 관리</td></tr>
+                        <tr><th>Phase 2</th><td>멀티턴 세션, 만족도 피드백, 추천 조건 중 실제 선택 조건 로깅(추천 품질 지표화)</td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </dd>
+
                 <dt>결과</dt>
-                <dd id="career-kakaopay-p02-result">개발 중. 조건 탐색 시간 단축과 BDA 쿼리 대리 작성 감소를 목표로 함</dd>
+                <dd id="career-kakaopay-p02-result">
+                  <p class="sub-note">개발 중 · 기대 효과</p>
+                  <ul class="dot-list">
+                    <li>조건 발견부터 활용까지의 탐색 시간 단축</li>
+                    <li>BDA의 쿼리 대리 작성 리소스 감소</li>
+                    <li>추천 불가 로그 기반 필터 확대 → 빌더 효용 증대의 선순환</li>
+                    <li class="placeholder">[출시 후: 추천 채택률 · 추천 불가율 · BDA 요청 건수 변화]</li>
+                  </ul>
+                </dd>
+
                 <dt>배운 점</dt>
-                <dd id="career-kakaopay-p02-learning">LLM 기능의 신뢰는 모델 성능만큼 '답하지 않을 때'를 정하는 정책에서 나온다는 것. 추천 불가 로그를 필터 확장으로 연결하면 실패도 제품 개선 데이터가 됨</dd>
-              </dl>
-                <details class="fig-toggle">
-                  <summary>흐름도 보기</summary>
-                  <figure id="career-kakaopay-p02-figure" class="flow-figure">
+                <dd id="career-kakaopay-p02-learning" class="placeholder">[배운 점]</dd>
+
+                <figure id="career-kakaopay-p02-figure" class="flow-figure">
                   <div class="flow-scroll">
                     <svg viewBox="0 0 640 214" role="img" aria-label="자연어 입력부터 빌더 적용까지의 AI 타겟조건 추천 흐름">
                       <defs>
@@ -495,7 +598,7 @@
                   </div>
                   <figcaption>AI는 검증된 필터 후보만 제시하고, 적용 여부는 사용자가 결정</figcaption>
                 </figure>
-                </details>
+              </dl>
             </article>
           </div>
         </div>
@@ -541,10 +644,6 @@
                 <dt>결과</dt>
                 <dd id="career-cjenm-p01-result">업종·콘텐츠 효율 지표 기반 최적화 기능 출시, 비타겟팅 상품 대비 CTR 40%·VTR 8% 상승</dd>
               </dl>
-                <details class="fig-toggle">
-                  <summary>산출물 보기</summary>
-                  <figure id="career-cjenm-p01-figure" class="shot-figure"><img src="assets/projects/career-cjenm-p01.jpg" alt="서비스 아키텍처 정의" loading="lazy"><figcaption>서비스 아키텍처 정의</figcaption></figure>
-                </details>
             </article>
           </div>
         </div>
@@ -589,10 +688,6 @@
                   </ul>
                 </dd>
               </dl>
-                <details class="fig-toggle">
-                  <summary>산출물 보기</summary>
-                  <figure id="career-igaworks-p01-figure" class="shot-figure"><img src="assets/projects/career-igaworks-p01.jpg" alt="어드민 스토리보드" loading="lazy"><figcaption>어드민 스토리보드</figcaption></figure>
-                </details>
             </article>
             <article id="career-igaworks-p02" class="project">
               <div class="project-head">
@@ -615,10 +710,6 @@
                   </ul>
                 </dd>
               </dl>
-                <details class="fig-toggle">
-                  <summary>산출물 보기</summary>
-                  <figure id="career-igaworks-p02-figure" class="shot-figure"><img src="assets/projects/career-igaworks-p02.jpg" alt="네이티브 광고 타입 워크플로우" loading="lazy"><figcaption>네이티브 광고 타입 워크플로우</figcaption></figure>
-                </details>
             </article>
             <div id="career-igaworks-more" class="more-projects">
               <h5>그 밖의 프로젝트</h5>
@@ -669,10 +760,6 @@
                 <dt>결과</dt>
                 <dd id="career-cizion-p01-result">반기 광고 매출 550% 성장 (입사 전년 동분기 대비), eCPM 70~80원 → 200원대</dd>
               </dl>
-                <details class="fig-toggle">
-                  <summary>산출물 보기</summary>
-                  <figure id="career-cizion-p01-figure" class="shot-figure"><img src="assets/projects/career-cizion-p01.jpg" alt="지면 Tier별 최적화 프로세스" loading="lazy"><figcaption>지면 Tier별 최적화 프로세스</figcaption></figure>
-                </details>
             </article>
             <article id="career-cizion-p02" class="project">
               <div class="project-head">
@@ -695,10 +782,6 @@
                   </ul>
                 </dd>
               </dl>
-                <details class="fig-toggle">
-                  <summary>산출물 보기</summary>
-                  <figure id="career-cizion-p02-figure" class="shot-figure"><img src="assets/projects/career-cizion-p02.jpg" alt="SSP 대시보드 스토리보드" loading="lazy"><figcaption>SSP 대시보드 스토리보드</figcaption></figure>
-                </details>
             </article>
             <div id="career-cizion-more" class="more-projects">
               <h5>그 밖의 프로젝트</h5>
@@ -731,7 +814,7 @@
       </div>
       <div id="tools-ai" class="tools-row">
         <h3>AI</h3>
-        <div class="chips"><span class="chip">n8n</span><span class="chip">Claude</span></div>
+        <div class="chips"><span class="chip placeholder">사용 중인 AI 도구</span></div>
       </div>
     </section>
 
@@ -740,8 +823,8 @@
   <!-- ========== S05-footer : 연락처 · 최종 수정일 ========== -->
   <footer id="sec-footer" data-section="S05-footer">
     <div class="wrap">
-      <p id="footer-credit">이 페이지는 Claude와 함께 기획(PRD)부터 디자인·구현까지 진행했습니다.</p>
-      <p id="footer-updated">최종 수정 2026.10.01</p>
+      <p id="footer-contact" class="placeholder">[이메일 · GitHub]</p>
+      <p id="footer-updated" class="placeholder">최종 수정 [YYYY-MM-DD]</p>
     </div>
   </footer>
 
