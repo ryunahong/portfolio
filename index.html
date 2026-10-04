@@ -146,6 +146,8 @@
       border-bottom: 2px solid var(--line-strong);
     }
     .sec-title small { font-size: 14px; font-weight: 500; color: var(--text-muted); }
+    .sec-title { flex-wrap: wrap; }
+    .sec-hint { margin-left: auto; font-size: 13px; font-weight: 400; color: var(--text-muted); }
     .tenure { color: var(--text-muted); }
     .company-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 14px; }
     .company-title .meta-role { margin-top: 0; }
@@ -356,6 +358,7 @@
       .wrap { padding: 0 16px; }
       /* 모바일: 메뉴를 짧은 이름으로 */
       #header-nav ul { gap: 2px; }
+      .sec-hint { flex-basis: 100%; margin-left: 0; }
       #header-nav a { padding: 5px 10px; }
       .nav-full { display: none; }
       .nav-short { display: inline; }
@@ -392,7 +395,7 @@
       }
       .fig-toggle { display: none; }
       #sec-header, #to-top { display: none; }
-      .evidence-hint { display: none; }
+      .evidence-hint, .sec-hint { display: none; }
       body { font-size: 12px; }
       main section { padding-top: 28px; }
       .project { break-inside: avoid; box-shadow: none; }
@@ -447,7 +450,7 @@
 
     <!-- ========== S02-skills : 핵심 역량 4개 ========== -->
     <section id="sec-skills" data-section="S02-skills">
-      <h2 class="sec-title">핵심 역량</h2>
+      <h2 class="sec-title">핵심 역량 <span class="sec-hint">역량 별 관련 프로젝트로 바로 이동할 수 있어요.</span></h2>
       <div class="skills-grid">
         <article id="skills-ad-ecosystem" class="skill-card">
           <p class="skill-num">01</p>
@@ -474,7 +477,7 @@
 
     <!-- ========== S03-career : 경력 & 프로젝트 (회사별, 최신순) ========== -->
     <section id="sec-career" data-section="S03-career">
-      <h2 class="sec-title">경력 &amp; 프로젝트 <small>총 7년 4개월</small></h2>
+      <h2 class="sec-title">경력 &amp; 프로젝트 <small>총 7년 4개월</small><span class="sec-hint">흐름도와 그 밖의 프로젝트는 눌러서 볼 수 있어요.</span></h2>
 
       <!-- ----- 회사: 카카오페이 ----- -->
       <article id="career-kakaopay" class="company">
