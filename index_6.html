@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex">
   <title>홍륜아 | 플랫폼 PM</title>
+  <script>try { var t = localStorage.getItem("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}</script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 
   <!--
@@ -15,15 +16,14 @@
     - 회사 블록: id="career-{회사}"  (요약: career-{회사}-summary)
     - 회사 안 프로젝트: id="career-{회사}-p{번호}"
     - 프로젝트 상세 항목: id="career-{회사}-p{번호}-{항목}"
-      항목 = overview / role / background / work / result / learning / figure
+      항목 = overview / role / background / work / result / figure
     - 회사 로고: assets/logos/{회사 id}.png
     - 회사 id: kakaopay · cjenm · igaworks · cizion (최신순)
     - 카카오페이: p01 = 타겟서비스(셀프서브 빌더), p02 = AI 타겟조건 추천
     - CJ ENM: p01 = AI CTR·VTR 최적화 상품 / 애드팝콘: p01 = 오퍼월 플랫폼 개편, p02 = SSP 서빙 고도화
     - 시지온: p01 = 지면 수익화 최적화, p02 = 자체 SSP(LAP) / 그 밖의 프로젝트: career-{회사}-more
-    - 소개 대표 성과: intro-highlights (hl-revenue · hl-ecpm · hl-ai · hl-filters)
     - 재직 기간·총 경력은 2026.10 기준. 이후 카카오페이 기간·총 경력 갱신 필요
-    - 아직 기능(접힘/펼침, PDF 생성 등)은 없음. 디자인만 적용된 상태.
+    - 테마: 헤더 #theme-toggle 로 라이트/다크 전환 (html data-theme, localStorage "theme"에 저장)
     ============================================================
   -->
   <style>
@@ -41,8 +41,9 @@
       --radius: 10px;
       --maxw: 880px;
     }
+    /* 다크: 시스템 설정을 따르되, 헤더 버튼으로 고르면(data-theme) 그쪽을 우선 */
     @media (prefers-color-scheme: dark) {
-      :root {
+      :root:not([data-theme="light"]) {
         --bg: #111317;
         --surface: #181b21;
         --text: #eceef2;
@@ -53,6 +54,17 @@
         --accent: #8aa2ff;
         --accent-soft: #1c2336;
       }
+    }
+    :root[data-theme="dark"] {
+      --bg: #111317;
+      --surface: #181b21;
+      --text: #eceef2;
+      --text-sub: #b3b9c4;
+      --text-muted: #7c8390;
+      --line: #262a32;
+      --line-strong: #eceef2;
+      --accent: #8aa2ff;
+      --accent-soft: #1c2336;
     }
 
     /* ---------- 기본 ---------- */
@@ -83,16 +95,42 @@
       border-bottom: 1px solid var(--line);
     }
     #sec-header .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; gap: 16px; }
-    .header-mark { font-weight: 700; font-size: 15px; white-space: nowrap; }
+    .header-mark { flex: none; font-size: 24px; line-height: 1; }
     #header-nav ul { display: flex; gap: 24px; }
     #header-nav a { font-size: 14px; color: var(--text-sub); transition: color .15s; }
     #header-nav a:hover { color: var(--text); }
-    #header-pdf {
-      font-size: 13px; font-weight: 600; padding: 7px 14px; border-radius: 999px;
-      border: 1px solid var(--line); color: var(--text); white-space: nowrap;
-      transition: border-color .15s, background .15s;
+    /* 라이트/다크 토글 스위치: 동그란 손잡이가 지금 모드 아이콘을 들고 좌(라이트)↔우(다크)로 이동 */
+    #theme-toggle {
+      position: relative; flex: none; width: 56px; height: 30px; padding: 0;
+      border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--text-muted);
+      cursor: pointer; transition: border-color .2s;
     }
-    #header-pdf:hover { border-color: var(--text); }
+    #theme-toggle:hover { border-color: var(--text-muted); }
+    #theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    .tt-knob {
+      position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%;
+      display: grid; place-items: center; background: var(--bg); color: var(--text);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, .25); transition: transform .35s cubic-bezier(.3, .7, .3, 1);
+    }
+    .tt-knob svg { width: 14px; height: 14px; }
+    #theme-toggle .icon-moon { display: none; }
+    :root[data-theme="dark"] .tt-knob { transform: translateX(26px); background: #353b47; }
+    :root[data-theme="dark"] #theme-toggle .icon-moon { display: block; }
+    :root[data-theme="dark"] #theme-toggle .icon-sun { display: none; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) .tt-knob { transform: translateX(26px); background: #353b47; }
+      :root:not([data-theme="light"]) #theme-toggle .icon-moon { display: block; }
+      :root:not([data-theme="light"]) #theme-toggle .icon-sun { display: none; }
+    }
+    /* 전환하는 순간에만 색을 서서히 바꾸기 (평소 hover 효과에는 영향 없음) */
+    :root.theme-fading, :root.theme-fading *, :root.theme-fading *::before, :root.theme-fading *::after {
+      transition: background-color .45s ease, color .45s ease, border-color .45s ease, fill .45s ease, stroke .45s ease, box-shadow .45s ease !important;
+    }
+    :root.theme-fading .tt-knob { transition: transform .35s cubic-bezier(.3, .7, .3, 1), background-color .45s ease, color .45s ease !important; }
+    @media (prefers-reduced-motion: reduce) {
+      :root.theme-fading, :root.theme-fading * { transition: none !important; }
+      .tt-knob { transition: none; }
+    }
 
     /* ---------- 공통 섹션 ---------- */
     main section { padding: 72px 0 0; }
@@ -104,7 +142,8 @@
     }
     .sec-title small { font-size: 14px; font-weight: 500; color: var(--text-muted); }
     .tenure { color: var(--text-muted); }
-    .meta-role { margin-top: 0; }
+    .company-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 14px; }
+    .company-title .meta-role { margin-top: 0; }
 
     /* ---------- S01-intro ---------- */
     #sec-intro { padding-top: 88px; }
@@ -114,7 +153,7 @@
     #intro-credit { display: inline-block; margin-bottom: 28px; padding: 6px 14px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; line-height: 1.5; }
     #intro-photo { flex: none; width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line); }
     #intro-role { margin-top: 8px; font-size: 17px; color: var(--text-sub); }
-    #intro-summary { margin-top: 28px; font-size: 18px; line-height: 1.75; max-width: 640px; }
+    #intro-summary { margin-top: 28px; font-size: 17px; line-height: 1.8; word-break: keep-all; }
     #intro-contact { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 28px; font-size: 14px; color: var(--text-sub); }
     #intro-contact li::before { content: "—"; margin-right: 8px; color: var(--line); }
     #intro-contact li:first-child::before { content: none; }
@@ -129,7 +168,7 @@
     .skill-card:hover { border-color: var(--line); }
     .skill-num { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 0.04em; }
     .skill-card h3 { margin-top: 6px; font-size: 16px; font-weight: 700; }
-    .skill-card p { margin-top: 6px; font-size: 14px; color: var(--text-sub); }
+    .skill-card p { margin-top: 6px; font-size: 14px; color: var(--text-sub); word-break: keep-all; }
 
     /* ---------- S03-career ---------- */
     .company { padding: 36px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 48px 1fr; gap: 0 20px; }
@@ -147,6 +186,8 @@
     .company-name { font-size: 19px; font-weight: 700; line-height: 1.4; }
     .meta { display: flex; flex-wrap: wrap; align-items: center; margin-top: 4px; font-size: 14px; color: var(--text-sub); }
     .meta span + span::before { content: ""; display: inline-block; width: 1px; height: 11px; background: var(--line); margin: 0 10px; vertical-align: middle; }
+    .company-scope { display: flex; gap: 8px; margin-top: 8px; font-size: 14px; line-height: 1.6; color: var(--text); }
+    .scope-label { flex: none; font-weight: 700; color: var(--accent); }
     .company-duties { margin-top: 16px; }
     .company-duties li { position: relative; padding-left: 14px; font-size: 15px; color: var(--text-sub); }
     .company-duties li::before { content: ""; position: absolute; left: 0; top: 11px; width: 4px; height: 4px; border-radius: 50%; background: var(--text-muted); }
@@ -154,7 +195,7 @@
     .career-projects { margin-top: 24px; display: flex; flex-direction: column; gap: 12px; }
     .project {
       border: 1px solid var(--line); border-radius: var(--radius);
-      padding: 22px 24px; background: var(--bg);
+      padding: 22px 24px; background: var(--surface);
       transition: border-color .15s, box-shadow .15s;
     }
     .project:hover { border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); box-shadow: 0 4px 16px -8px rgba(20, 30, 60, .12); }
@@ -219,19 +260,12 @@
     .f-note { font-size: 11px; fill: var(--text-muted); }
     .f-example { font-size: 11.5px; fill: var(--text-muted); text-anchor: middle; }
 
-    /* 대표 성과 (intro) */
-    #intro-highlights { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: 40px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
-    .hl { background: var(--bg); padding: 18px 18px 16px; }
-    .hl-num { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; color: var(--accent); line-height: 1.3; }
-    .hl-num small { font-size: 14px; font-weight: 700; }
-    .hl-label { margin-top: 4px; font-size: 13px; color: var(--text-sub); line-height: 1.5; }
-    .hl-src { margin-top: 2px; font-size: 12px; color: var(--text-muted); }
-
     /* 이전 회사 공통 */
     .company-desc { margin-top: 2px; font-size: 13px; color: var(--text-muted); }
     .project-meta { margin-top: 2px; font-size: 12.5px; color: var(--text-muted); }
     .metrics { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
     .metric { font-size: 12.5px; font-weight: 600; padding: 3px 10px; border-radius: 6px; background: var(--surface); color: var(--text); }
+    .project .metric, .project .mini-table th, .project figure.flow-figure { background: var(--bg); }
     .metric b { color: var(--accent); }
     .more-projects { display: grid; grid-template-columns: 104px 1fr; gap: 12px; align-items: start; padding: 14px 4px 0; }
     .more-projects h5 { margin: 0; padding-top: 5px; white-space: nowrap; font-size: 13px; font-weight: 600; color: var(--text-muted); }
@@ -259,6 +293,58 @@
     #sec-footer { margin-top: 96px; border-top: 1px solid var(--line); padding: 32px 0 48px; }
     #sec-footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 13px; color: var(--text-muted); }
 
+    /* ---------- 핵심 역량 → 관련 프로젝트 이동 ---------- */
+    .skill-evidence[role="button"] { cursor: pointer; border-radius: 4px; transition: color .15s; }
+    .skill-evidence[role="button"]:hover { color: var(--text); }
+    .skill-evidence[role="button"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+    .evidence-hint { display: block; margin-top: 8px; font-size: 12.5px; font-weight: 600; color: var(--accent); }
+    .skill-evidence:hover .evidence-hint { text-decoration: underline; text-underline-offset: 3px; }
+    .project.is-evidence { border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+
+    /* ---------- 그 밖의 프로젝트 모달 ---------- */
+    .chip-btn { font-family: inherit; color: var(--text); background: var(--bg); cursor: pointer; transition: border-color .15s, color .15s, background .15s; }
+    .chip-btn::after { content: "+"; margin-left: 6px; font-weight: 700; color: var(--text-muted); }
+    .chip-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .chip-btn:hover::after { color: var(--accent); }
+    .chip-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    #project-modal {
+      width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 64px); padding: 28px 28px 24px; overflow: auto;
+      border: 1px solid var(--line); border-radius: 14px; background: var(--bg); color: var(--text);
+      box-shadow: 0 24px 60px -20px rgba(10, 15, 30, .45);
+    }
+    #project-modal::backdrop { background: rgba(10, 12, 18, .45); backdrop-filter: blur(2px); }
+    #project-modal[open] { animation: pm-in .2s ease-out; }
+    @keyframes pm-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    .pm-close {
+      position: absolute; top: 14px; right: 14px; width: 32px; height: 32px; border: 0; border-radius: 8px;
+      background: transparent; color: var(--text-muted); font-size: 22px; line-height: 1; cursor: pointer;
+    }
+    .pm-close:hover { background: var(--surface); color: var(--text); }
+    .pm-company { font-size: 12.5px; font-weight: 600; color: var(--accent); }
+    .pm-title { margin-top: 4px; padding-right: 32px; font-size: 19px; font-weight: 700; line-height: 1.45; }
+    .pm-meta { margin-top: 4px; font-size: 13px; color: var(--text-muted); }
+    .pm-body { margin: 18px 0 0; padding-top: 16px; border-top: 1px dashed var(--line); display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 10px 14px; font-size: 14.5px; }
+    .pm-body dt { font-size: 13px; font-weight: 600; color: var(--text-muted); padding-top: 1px; }
+    .pm-body dd { margin: 0; color: var(--text-sub); }
+    .pm-link { display: inline-block; margin-top: 18px; font-size: 13px; font-weight: 600; color: var(--accent); }
+    .pm-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+    @media (max-width: 720px) {
+      #project-modal { padding: 24px 20px 20px; }
+      .pm-body { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+      .pm-body dd { margin-bottom: 10px; }
+    }
+    @media (prefers-reduced-motion: reduce) { #project-modal[open] { animation: none; } }
+    @media print { .chip-btn::after { content: none; } }
+
+    /* ---------- 맨 위로 버튼 ---------- */
+    #to-top {
+      position: fixed; right: 24px; bottom: 24px; z-index: 15; width: 44px; height: 44px; border-radius: 50%;
+      display: grid; place-items: center; font-size: 18px; font-weight: 700;
+      background: var(--text); color: var(--bg); box-shadow: 0 8px 20px -8px rgba(0, 0, 0, .4);
+      opacity: 0; transform: translateY(12px); pointer-events: none; transition: opacity .25s, transform .25s;
+    }
+    #to-top.is-shown { opacity: 1; transform: none; pointer-events: auto; }
+
     /* ---------- 반응형 ---------- */
     @media (max-width: 720px) {
       body { font-size: 14.5px; }
@@ -271,10 +357,9 @@
       #intro-summary { font-size: 16px; }
       main section { padding-top: 56px; }
       .skills-grid { grid-template-columns: 1fr; }
-      #intro-highlights { grid-template-columns: repeat(2, 1fr); }
-      .hl-num { font-size: 20px; }
       .more-projects { grid-template-columns: 1fr; gap: 6px; }
       .company { grid-template-columns: 1fr; gap: 14px; }
+      #to-top { right: 16px; bottom: 16px; }
       .project { padding: 18px; }
       .project-detail { grid-template-columns: minmax(0, 1fr); gap: 2px; }
       .project-detail dd { margin-bottom: 10px; }
@@ -285,8 +370,20 @@
 
     /* ---------- 인쇄 (PDF) ---------- */
     @media print {
+      :root, :root[data-theme] {
+        --bg: #ffffff;
+        --surface: #f7f8fa;
+        --text: #16181d;
+        --text-sub: #4b5260;
+        --text-muted: #8a909c;
+        --line: #e6e8ec;
+        --line-strong: #16181d;
+        --accent: #3a5bd9;
+        --accent-soft: #eef2fd;
+      }
       .fig-toggle { display: none; }
-      #sec-header { display: none; }
+      #sec-header, #to-top { display: none; }
+      .evidence-hint { display: none; }
       body { font-size: 12px; }
       main section { padding-top: 28px; }
       .project { break-inside: avoid; box-shadow: none; }
@@ -295,10 +392,10 @@
 </head>
 <body>
 
-  <!-- ========== S00-header : 상단 네비 + PDF 버튼 ========== -->
+  <!-- ========== S00-header : 상단 네비 + 라이트/다크 전환 버튼 ========== -->
   <header id="sec-header" data-section="S00-header">
     <div class="wrap">
-      <a href="#sec-intro" class="header-mark">홍륜아</a>
+      <a href="#sec-intro" class="header-mark" aria-label="홍륜아 · 맨 위로">🌞</a>
       <nav id="header-nav" aria-label="섹션 이동">
         <ul>
           <li><a href="#sec-skills">핵심 역량</a></li>
@@ -306,7 +403,12 @@
           <li><a href="#sec-tools">스킬 &amp; 툴</a></li>
         </ul>
       </nav>
-      <a id="header-pdf" href="#">PDF 다운로드</a>
+      <button type="button" id="theme-toggle" role="switch" aria-checked="false" aria-label="다크 모드">
+        <span class="tt-knob" aria-hidden="true">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </span>
+      </button>
     </div>
   </header>
 
@@ -324,20 +426,14 @@
       </div>
       <p id="intro-role">플랫폼 PM · 카카오페이 타겟팅 플랫폼 · 경력 7년</p>
       <p id="intro-summary">
-        매체 수익화, 광고 운영, 광고·타겟 플랫폼 기획을 거친 플랫폼 PM입니다.
-        최근에는 타겟팅 플랫폼에 AI 기반 조건 추천 기능을 기획하고 있습니다.
+        광고 네트워크 및 배너 운영·영업·정산 현장에서 출발해, 지금은 타겟팅 플랫폼을 담당하고 있는 플랫폼 PM입니다.<br>
+        쓰는 사람의 실수가 최대한 일어나지 않도록 정책과 안전장치부터 설계하고, 판단의 근거는 직접 데이터를 분석해 만듭니다.<br>
+        최근에는 AI 도구를 적극 활용해 기획 속도를 높이고 있습니다.
       </p>
       <ul id="intro-contact">
         <li id="intro-email"><a href="mailto:ghdbfsdk@gmail.com">ghdbfsdk@gmail.com</a></li>
         <li id="intro-phone"><a href="tel:010-6727-2854">010-6727-2854</a></li>
       </ul>
-
-      <div id="intro-highlights" aria-label="대표 성과">
-        <div class="hl" id="hl-revenue"><p class="hl-num">550%</p><p class="hl-label">반기 광고 매출 성장</p><p class="hl-src">시지온 · 입사 전년 동분기 대비</p></div>
-        <div class="hl" id="hl-ecpm"><p class="hl-num">200<small>원대</small></p><p class="hl-label">eCPM 개선 (기존 70~80원)</p><p class="hl-src">시지온 · 약 1,000개 지면</p></div>
-        <div class="hl" id="hl-ai"><p class="hl-num">CTR +40%</p><p class="hl-label">AI 최적화 광고 상품 출시</p><p class="hl-src">CJ ENM · 비타겟팅 상품 대비</p></div>
-        <div class="hl" id="hl-filters"><p class="hl-num">약 5만 <small>개</small></p><p class="hl-label">셀프서브 빌더의 타겟조건</p><p class="hl-src">카카오페이</p></div>
-      </div>
     </section>
 
     <!-- ========== S02-skills : 핵심 역량 4개 ========== -->
@@ -347,22 +443,22 @@
         <article id="skills-ad-ecosystem" class="skill-card">
           <p class="skill-num">01</p>
           <h3>광고 생태계 이해 (Supply · Demand)</h3>
-          <p>매체 수익화(SSP 미디에이션), 광고 집행(AE), 애드서버 기획까지 공급·수요 양쪽 실무 경험</p>
+          <p class="skill-evidence" data-evidence="career-cizion-p01 career-cizion-p02">매체 수익화(SSP 미디에이션), 광고 집행(AE), 애드서버 기획까지 공급·수요 양쪽 실무 경험을 바탕으로 Ad Tech 도메인에 대한 이해도 보유</p>
         </article>
         <article id="skills-ad-platform" class="skill-card">
           <p class="skill-num">02</p>
           <h3>광고 플랫폼 기획·설계</h3>
-          <p>오퍼월 광고 플랫폼 개편, SSP 서빙 기능, 자체 SSP MVP 등 광고 플랫폼 기획·출시</p>
+          <p class="skill-evidence" data-evidence="career-igaworks-p01 career-igaworks-p02 career-cizion-p02">오퍼월 광고 플랫폼 개편, SSP 서빙 기능, 자체 SSP MVP 등 광고 플랫폼 기획·출시</p>
         </article>
         <article id="skills-audience" class="skill-card">
           <p class="skill-num">03</p>
           <h3>타겟·오디언스 플랫폼</h3>
-          <p>약 5만 개 타겟조건의 셀프서브 빌더 기획·운영, 레거시 플랫폼 전환</p>
+          <p class="skill-evidence" data-evidence="career-kakaopay-p01">약 5만 개 타겟조건으로 구성된 셀프서브 빌더 기획·운영, 레거시 플랫폼에서 전환될 수 있는 환경 마련</p>
         </article>
         <article id="skills-ai" class="skill-card">
           <p class="skill-num">04</p>
           <h3>AI 기능 기획</h3>
-          <p>AI 기반 CTR·VTR 최적화 광고 상품 출시, 자연어 타겟조건 추천 기능 기획</p>
+          <p class="skill-evidence" data-evidence="career-kakaopay-p02 career-cjenm-p01">RAG+LLM 에이전트 기반 타겟조건 탐색·추천 기능 기획, AI 기반 CTR·VTR 최적화 광고 상품 출시</p>
         </article>
       </div>
     </section>
@@ -376,9 +472,12 @@
         <div class="company-logo"><img src="assets/logos/kakaopay.png" alt="카카오페이 로고" width="48" height="48"></div>
         <div class="company-body">
           <div id="career-kakaopay-summary">
-            <h3 class="company-name">카카오페이</h3>
+            <div class="company-title">
+              <h3 class="company-name">카카오페이</h3>
+              <p class="meta meta-role"><span>데이터그로스팀</span><span>플랫폼 PM</span></p>
+            </div>
             <p class="meta"><span>2023.05 – 재직 중</span><span class="tenure">3년 4개월</span></p>
-            <p class="meta meta-role"><span>데이터그로스팀</span><span>플랫폼 PM</span></p>
+            <p class="company-scope"><span class="scope-label">담당</span><span>타겟팅 빌더 (Audience_list 부문) · CXM (타겟 세그먼트 플랫폼) · 실시간 타겟팅 플랫폼 · CMS</span></p>
             <ul class="company-duties">
               <li>타겟팅 플랫폼(CXM · 타겟서비스) 기획 및 운영</li>
               <li>셀프서브 타겟 빌더 '타겟서비스' 기획, 레거시 타겟 세그먼트 플랫폼 종료 및 신규 플랫폼 전환 로드맵 수립</li>
@@ -393,14 +492,13 @@
               <div class="project-head">
                 <span class="tag">PM</span>
                 <div>
-                  <h4>타겟서비스 — 셀프서브 타겟 빌더</h4>
+                  <h4>타겟서비스 — 타겟 목록 추출 기능 및 빌더 기획·출시</h4>
                   <p class="project-meta">출시·운영 중 · 서비스 기획, 전환 로드맵</p>
-                  <div class="metrics"><span class="metric">타겟조건 <b>약 5만 개</b></span><span class="metric">카테고리 약 5천 개</span></div>
                 </div>
               </div>
               <dl id="career-kakaopay-p01-detail" class="project-detail">
                 <dt>개요</dt>
-                <dd id="career-kakaopay-p01-overview">마케터 → BDA 쿼리 요청 → 수동 등록으로 이어지던 레거시(CXM) 프로세스를, SQL 없이 빌더 UI만으로 조건 탐색부터 목록 추출까지 끝내는 셀프서브 타겟팅 플랫폼으로 전환</dd>
+                <dd id="career-kakaopay-p01-overview">마케터 → BDA 쿼리 요청 → 수동 등록으로 이어지던 레거시(CXM) 프로세스를, SQL 없이 빌더 UI만으로 조건 탐색부터 목록 추출까지 끝내는 셀프서브 타겟팅 플랫폼으로 전환하기 위함</dd>
                 <dt>한 일</dt>
                 <dd id="career-kakaopay-p01-work">
                   <ul class="dot-list">
@@ -411,9 +509,7 @@
                   </ul>
                 </dd>
                 <dt>결과</dt>
-                <dd id="career-kakaopay-p01-result">데이터 비전문가가 빌더만으로 조건 탐색부터 목록 추출까지 직접 수행. CXM 통합 전환 진행 중</dd>
-                <dt>배운 점</dt>
-                <dd id="career-kakaopay-p01-learning">비전문가용 데이터 도구는 표현력보다 잘못된 쿼리가 나오지 않는 구조가 먼저라는 것. 안전장치를 갖춘 뒤에야 조건의 표현 범위를 넓힐 수 있음</dd>
+                <dd id="career-kakaopay-p01-result">데이터 비전문가가 별도 지식이 없어도 각종 사내 데이터 타겟조건 탐색부터 타겟 세그먼트 구성, 목록 추출까지 직접 수행할 수 있도록 함. CXM 통합 전환 진행 중</dd>
               </dl>
                 <details class="fig-toggle">
                   <summary>흐름도 보기</summary>
@@ -426,18 +522,17 @@
                       </defs>
                       <text x="0" y="50" class="f-lane">기존 CXM</text>
                       <text x="0" y="68" class="f-lane-sub">4단계 · 수작업</text>
-                      <g class="f-box"><rect x="96" y="28" width="122" height="52" rx="8"/><text x="157" y="50">마케터</text><text x="157" y="67">조건 요청</text></g>
-                      <g class="f-box"><rect x="236" y="28" width="122" height="52" rx="8"/><text x="297" y="50">BDA</text><text x="297" y="67">쿼리 작성</text></g>
-                      <g class="f-box"><rect x="376" y="28" width="122" height="52" rx="8"/><text x="437" y="50">쿼리 복사</text><text x="437" y="67">수동 등록</text></g>
-                      <g class="f-box"><rect x="516" y="28" width="122" height="52" rx="8"/><text x="577" y="50">별도 플랫폼에서</text><text x="577" y="67">활용</text></g>
-                      <g class="f-line"><path d="M218 54H234" marker-end="url(#kp-arrow)"/><path d="M358 54H374" marker-end="url(#kp-arrow)"/><path d="M498 54H514" marker-end="url(#kp-arrow)"/></g>
+                      <g class="f-box"><rect x="96" y="28" width="100" height="52" rx="8"/><text x="146" y="50">마케터</text><text x="146" y="67">조건 요청</text></g>
+                      <g class="f-box"><rect x="212" y="28" width="92" height="52" rx="8"/><text x="258" y="50">BDA</text><text x="258" y="67">쿼리 작성</text></g>
+                      <g class="f-box"><rect x="320" y="28" width="156" height="52" rx="8"/><text x="398" y="50">쿼리 복사</text><text x="398" y="67">타겟 어드민에서 수동 등록</text></g>
+                      <g class="f-box"><rect x="492" y="28" width="146" height="52" rx="8"/><text x="565" y="50">활용 플랫폼으로 이동</text><text x="565" y="67">실제 활용</text></g>
+                      <g class="f-line"><path d="M196 54H210" marker-end="url(#kp-arrow)"/><path d="M304 54H318" marker-end="url(#kp-arrow)"/><path d="M476 54H490" marker-end="url(#kp-arrow)"/></g>
 
                       <text x="0" y="142" class="f-lane f-lane-accent">타겟서비스</text>
-                      <text x="0" y="160" class="f-lane-sub">3단계 · 셀프서브</text>
-                      <g class="f-box f-box-accent"><rect x="96" y="120" width="168" height="52" rx="8"/><text x="180" y="142">빌더에서</text><text x="180" y="159">조건 탐색·조합</text></g>
-                      <g class="f-box f-box-accent"><rect x="283" y="120" width="168" height="52" rx="8"/><text x="367" y="142">SQL 자동 변환</text><text x="367" y="159">최적화·null guard·약관</text></g>
-                      <g class="f-box f-box-accent"><rect x="470" y="120" width="168" height="52" rx="8"/><text x="554" y="142">목록 추출·API</text><text x="554" y="159">활용처 안에서 바로 사용</text></g>
-                      <g class="f-line f-line-accent"><path d="M264 146H281" marker-end="url(#kp-arrow-accent)"/><path d="M451 146H468" marker-end="url(#kp-arrow-accent)"/></g>
+                      <text x="0" y="160" class="f-lane-sub">2단계 · 셀프서브</text>
+                      <g class="f-box f-box-accent"><rect x="96" y="120" width="260" height="52" rx="8"/><text x="226" y="142">빌더에서 조건 탐색·조합</text><text x="226" y="159">최적화된 SQL로 자동 변환</text></g>
+                      <g class="f-box f-box-accent"><rect x="378" y="120" width="260" height="52" rx="8"/><text x="508" y="142">목록 추출·API</text><text x="508" y="159">활용처 안에서 바로 사용</text></g>
+                      <g class="f-line f-line-accent"><path d="M356 146H376" marker-end="url(#kp-arrow-accent)"/></g>
                     </svg>
                   </div>
                   <figcaption>BDA를 거치던 요청·작성·등록 단계를 빌더 안의 셀프서브 흐름으로 대체</figcaption>
@@ -450,8 +545,7 @@
                 <span class="tag">PM</span>
                 <div>
                   <h4>AI 기반 타겟조건 탐색·추천 <span class="status">개발 중</span></h4>
-                  <p class="project-meta">기능 기획 · 추천 정책, 사용자 플로우, 운영 구조</p>
-                  <div class="metrics"><span class="metric">Text-to-SQL 대신 <b>검증된 필터 추천</b></span><span class="metric">Human-in-the-loop</span></div>
+                  <p class="project-meta">상세 정책 및 기능 기획, 사용자 플로우, 운영 구조</p>
                 </div>
               </div>
               <dl id="career-kakaopay-p02-detail" class="project-detail">
@@ -459,17 +553,32 @@
                 <dd id="career-kakaopay-p02-overview">원하는 타겟을 자연어로 입력하면 약 5만 개 타겟조건 중 적합한 것을 필터 + 연산자 + 값 단위로 추천하는 기능</dd>
                 <dt>한 일</dt>
                 <dd id="career-kakaopay-p02-work">
-                  <ul class="dot-list">
-                    <li>AI가 SQL을 생성하지 않고 검증된 필터만 추천하도록 설계해 존재하지 않는 테이블·컬럼 생성을 차단</li>
-                    <li>유사도 75% 미만이면 추천 불가로 응답, 후보가 여럿이면 모두 제시, 값이 불명확하면 빈칸으로 두는 응답 정책</li>
-                    <li>AI는 후보만 제시하고 최종 선택은 사용자가 하는 플로우 설계</li>
-                    <li>요청·응답 로깅(Langfuse), 프롬프트 버전 관리, 임베딩 갱신, 추천 불가 키워드 기반 필터 확장 루프 설계</li>
-                  </ul>
+                  <div class="work-group">
+                    <h5>정책 수립</h5>
+                    <ul class="dot-list">
+                      <li>자연어 타겟조건 입력 → 의도(키워드) 추출 → 의도별 추천 가능 여부 판단 → 가능한 타겟조건에 한해 추천으로 이어지는 유저 플로우와 단계별 기준 상세 정의</li>
+                      <li>로그를 기반으로 타겟서비스를 고도화할 수 있도록 세션·로깅 정책 정의</li>
+                      <li>임베딩 데이터 생성·수정·삭제 시 즉시 반영을 시도하고, 기본은 야간 배치로 전체 재색인하는 갱신 정책 정의</li>
+                      <li>프롬프트 버전 관리, 특정 버전 활성화·롤백이 가능한 프롬프트 운영 정책 수립</li>
+                    </ul>
+                  </div>
+                  <div class="work-group">
+                    <h5>품질 개선</h5>
+                    <ul class="dot-list">
+                      <li>실제 타겟 플랫폼에서 최근 사용된 타겟조건 쿼리를 분석하여 자연어 테스트 데이터셋을 구성</li>
+                      <li>테스트 데이터셋 기준 F1 score를 트래킹하며 프롬프트·임베딩 범위 등을 개선할 수 있는 평가 체계 마련</li>
+                      <li>응답 실패 케이스를 줄이고 레거시 플랫폼 대체를 준비하기 위해, 사용 중인 타겟조건을 테이블 단위로 분석해 타겟서비스 내 제공 조건 확장</li>
+                    </ul>
+                  </div>
+                  <div class="work-group">
+                    <h5>Figma Design 에이전트를 활용한 UI 기획</h5>
+                    <ul class="dot-list">
+                      <li>상세 정책에 따른 빌더/패널 화면 상세 기획</li>
+                    </ul>
+                  </div>
                 </dd>
                 <dt>결과</dt>
                 <dd id="career-kakaopay-p02-result">개발 중. 조건 탐색 시간 단축과 BDA 쿼리 대리 작성 감소를 목표로 함</dd>
-                <dt>배운 점</dt>
-                <dd id="career-kakaopay-p02-learning">LLM 기능의 신뢰는 모델 성능만큼 '답하지 않을 때'를 정하는 정책에서 나온다는 것. 추천 불가 로그를 필터 확장으로 연결하면 실패도 제품 개선 데이터가 됨</dd>
               </dl>
                 <details class="fig-toggle">
                   <summary>흐름도 보기</summary>
@@ -508,10 +617,13 @@
         <div class="company-logo"><img src="assets/logos/cjenm.png" alt="CJ ENM 로고" width="48" height="48"></div>
         <div class="company-body">
           <div id="career-cjenm-summary">
-            <h3 class="company-name">CJ ENM</h3>
+            <div class="company-title">
+              <h3 class="company-name">CJ ENM</h3>
+              <p class="meta meta-role"><span>데이터솔루션센터 · 광고솔루션기획팀</span><span>팀원</span></p>
+            </div>
             <p class="company-desc">방송·디지털 광고 솔루션 (SSP, 비디오 광고)</p>
             <p class="meta"><span>2022.10 – 2023.05</span><span class="tenure">7개월</span></p>
-            <p class="meta meta-role"><span>데이터솔루션센터 · 광고솔루션기획팀</span><span>팀원</span></p>
+            <p class="company-scope"><span class="scope-label">담당</span><span>비디오 · DA 광고</span></p>
             <ul class="company-duties">
               <li>YouTube 비디오 광고의 AI 기반 CTR·VTR 최적화 상품 기획·출시</li>
               <li>비디오·DA 광고 플랫폼의 SSP 기능 고도화 및 개편 기획</li>
@@ -557,10 +669,13 @@
         <div class="company-logo"><img src="assets/logos/igaworks.png" alt="애드팝콘 (IGAWorks) 로고" width="48" height="48"></div>
         <div class="company-body">
           <div id="career-igaworks-summary">
-            <h3 class="company-name">애드팝콘 (IGAWorks)</h3>
+            <div class="company-title">
+              <h3 class="company-name">애드팝콘 (IGAWorks)</h3>
+              <p class="meta meta-role"><span>개발실 · 프로덕트팀</span><span>플랫폼 기획</span></p>
+            </div>
             <p class="company-desc">모바일 매체 수익화 (SSP, 리워드 광고·오퍼월)</p>
             <p class="meta"><span>2021.11 – 2022.10</span><span class="tenure">11개월</span></p>
-            <p class="meta meta-role"><span>개발실 · 프로덕트팀</span><span>플랫폼 기획</span></p>
+            <p class="company-scope"><span class="scope-label">담당</span><span>리워드 광고 플랫폼 · SSP</span></p>
             <ul class="company-duties">
               <li>리워드 광고 서버(오퍼월) 플랫폼 개편 프로젝트 리딩</li>
               <li>SSP 광고 서빙 고도화: 워터폴 단가 구조 개선, 네이티브 광고 타입, Line Item 기능 기획</li>
@@ -624,7 +739,7 @@
             </article>
             <div id="career-igaworks-more" class="more-projects">
               <h5>그 밖의 프로젝트</h5>
-              <div class="chips"><span class="chip">OfferWall SDK 리뉴얼</span><span class="chip">오퍼월 CS 대량 처리</span><span class="chip">CPA 광고 상품</span><span class="chip">위젯형 광고 상품</span><span class="chip">신규 캠페인 유형</span></div>
+              <div class="chips"><button type="button" class="chip chip-btn" data-modal="m-igaworks-sdk">OfferWall SDK 리뉴얼</button><button type="button" class="chip chip-btn" data-modal="m-igaworks-cs">오퍼월 CS 대량 처리</button><button type="button" class="chip chip-btn" data-modal="m-igaworks-cpa">CPA 광고 상품</button><button type="button" class="chip chip-btn" data-modal="m-igaworks-widget">위젯형 광고 상품</button><button type="button" class="chip chip-btn" data-modal="m-igaworks-campaign">신규 캠페인 유형</button></div>
             </div>
           </div>
         </div>
@@ -635,10 +750,13 @@
         <div class="company-logo"><img src="assets/logos/cizion.png" alt="시지온 로고" width="48" height="48"></div>
         <div class="company-body">
           <div id="career-cizion-summary">
-            <h3 class="company-name">시지온</h3>
+            <div class="company-title">
+              <h3 class="company-name">시지온</h3>
+              <p class="meta meta-role"><span>사업개발본부</span><span>디지털 광고 팀장</span></p>
+            </div>
             <p class="company-desc">소셜 댓글 솔루션 '라이브리', SNS 콘텐츠 큐레이팅 '어트랙트'</p>
             <p class="meta"><span>2019.04 – 2021.10</span><span class="tenure">2년 6개월</span></p>
-            <p class="meta meta-role"><span>사업개발본부</span><span>디지털 광고 팀장</span></p>
+            <p class="company-scope"><span class="scope-label">담당</span><span>광고 네트워크 사업 전반 (영업 · 기획 · 운영 · 정산 · CS)</span></p>
             <ul class="company-duties">
               <li>약 1,000개 언론사·커뮤니티 지면의 광고 네트워크 운영 총괄, 반기 광고 매출 550% 성장</li>
               <li>자체 SSP(LAP) MVP 및 콘텐츠 디스커버리 광고 상품 기획</li>
@@ -704,7 +822,7 @@
             </article>
             <div id="career-cizion-more" class="more-projects">
               <h5>그 밖의 프로젝트</h5>
-              <div class="chips"><span class="chip">콘텐츠 디스커버리 광고 상품</span><span class="chip">인플루언서 마케팅 플랫폼 (프로토타입)</span><span class="chip">내부 광고 운영 어드민</span><span class="chip">광고주 데일리 리포트 대시보드</span></div>
+              <div class="chips"><button type="button" class="chip chip-btn" data-modal="m-cizion-discovery">콘텐츠 디스커버리 광고 상품</button><button type="button" class="chip chip-btn" data-modal="m-cizion-influencer">인플루언서 마케팅 플랫폼 (프로토타입)</button><button type="button" class="chip chip-btn" data-modal="m-cizion-admin">내부 광고 운영 어드민</button><button type="button" class="chip chip-btn" data-modal="m-cizion-report">광고주 데일리 리포트 대시보드</button></div>
             </div>
           </div>
         </div>
@@ -733,7 +851,7 @@
       </div>
       <div id="tools-ai" class="tools-row">
         <h3>AI</h3>
-        <div class="chips"><span class="chip">n8n</span><span class="chip">Claude</span></div>
+        <div class="chips"><span class="chip">n8n</span><span class="chip">Claude</span><span class="chip">Orca</span></div>
       </div>
     </section>
 
@@ -745,6 +863,191 @@
       <p id="footer-updated">최종 수정 2026.10.01</p>
     </div>
   </footer>
+
+  <!-- ========== 그 밖의 프로젝트 모달 (칩 data-modal = template id) ========== -->
+  <dialog id="project-modal" aria-labelledby="pm-title">
+    <button type="button" class="pm-close" aria-label="닫기">×</button>
+    <div class="pm-content"></div>
+  </dialog>
+  <div hidden>
+    <template id="m-igaworks-sdk">
+      <p class="pm-company">애드팝콘</p>
+      <h3 class="pm-title">OfferWall SDK 리뉴얼</h3>
+      <p class="pm-meta">UI/UX · 출시 · 기획 100%</p>
+      <dl class="pm-body">
+        <dt>개요</dt><dd>OS별로 다르던 화면과 제휴사별로 흩어진 리포트를 통일한 오퍼월 SDK 리디자인</dd>
+        <dt>한 일</dt><dd><ul class="dot-list"><li>와이어프레임·상세 로직 정의</li><li>리포트 데이터 규격 통일, 신규 적재 항목 정의</li></ul></dd>
+      </dl>
+    </template>
+    <template id="m-igaworks-cs">
+      <p class="pm-company">애드팝콘</p>
+      <h3 class="pm-title">오퍼월 CS 대량 처리</h3>
+      <p class="pm-meta">신규 기능 · 출시 · 기획 100%</p>
+      <dl class="pm-body">
+        <dt>개요</dt><dd>건별 수동 처리하던 S2S 매체 CS를 일괄 처리하는 기능</dd>
+        <dt>한 일</dt><dd><ul class="dot-list"><li>처리 서식·성공/실패 규칙 정의</li><li>대량 처리 알고리즘 정의, 운영툴 화면 설계</li></ul></dd>
+      </dl>
+    </template>
+    <template id="m-igaworks-cpa">
+      <p class="pm-company">애드팝콘</p>
+      <h3 class="pm-title">CPA 광고 상품</h3>
+      <p class="pm-meta">신규 광고 상품 · 출시 · 기획 100%</p>
+      <dl class="pm-body">
+        <dt>개요</dt><dd>오퍼월에 CPA 광고 상품을 추가해 매출 확대</dd>
+        <dt>한 일</dt><dd><ul class="dot-list"><li>UI·랜딩 로직 정의</li><li>신규 데이터 적재 항목, 어드민·매체 리포팅 기획</li></ul></dd>
+      </dl>
+    </template>
+    <template id="m-igaworks-widget">
+      <p class="pm-company">애드팝콘</p>
+      <h3 class="pm-title">위젯형 광고 상품</h3>
+      <p class="pm-meta">신규 광고 상품 · 출시 · 기획 100%</p>
+      <dl class="pm-body">
+        <dt>개요</dt><dd>리워드형 중심의 상품 구성을 위젯형으로 확장</dd>
+        <dt>한 일</dt><dd><ul class="dot-list"><li>상품 UI·매체 커스텀 항목 정의</li><li>광고주 과금·매체비 구조 기획</li></ul></dd>
+      </dl>
+    </template>
+    <template id="m-igaworks-campaign">
+      <p class="pm-company">애드팝콘</p>
+      <h3 class="pm-title">신규 캠페인 유형</h3>
+      <p class="pm-meta">신규 광고 상품 · 출시 · 기획 100%</p>
+      <dl class="pm-body">
+        <dt>개요</dt><dd>광고주 니즈에 맞춘 오퍼월 신규 캠페인 유형 추가</dd>
+        <dt>한 일</dt><dd><ul class="dot-list"><li>유형별 이벤트 페이지 로직 정의</li><li>백오피스 기능 정의, QA·런칭</li></ul></dd>
+      </dl>
+    </template>
+    <template id="m-cizion-discovery">
+      <p class="pm-company">시지온</p>
+      <h3 class="pm-title">콘텐츠 디스커버리 광고 상품</h3>
+      <p class="pm-meta">신규 광고 상품 · 출시 (ver.0.5) · 기획 100%</p>
+      <dl class="pm-body">
+        <dt>개요</dt><dd>자사 댓글 데이터를 활용한 콘텐츠 추천·네이티브 광고 상품으로 신규 광고 영역 확보</dd>
+        <dt>한 일</dt><dd><ul class="dot-list"><li>시장 조사·포지셔닝, 상품 전략 수립</li><li>콘텐츠 노출 정책, 위젯 UI 기획</li></ul></dd>
+      </dl>
+      <a class="pm-link" href="https://www.sisain.co.kr/news/articleView.html?idxno=46800" target="_blank" rel="noopener">적용 사이트 보기 (시사IN) ↗</a>
+    </template>
+    <template id="m-cizion-influencer">
+      <p class="pm-company">시지온</p>
+      <h3 class="pm-title">인플루언서 마케팅 플랫폼 (프로토타입)</h3>
+      <p class="pm-meta">프로토타입 · 미출시 · 기획 70%</p>
+      <dl class="pm-body">
+        <dt>개요</dt><dd>인플루언서 후기 콘텐츠를 큐레이션·DA 구좌·SNS 광고와 묶은 패키지 상품 기획</dd>
+        <dt>한 일</dt><dd><ul class="dot-list"><li>패키지 상품 아이데이션</li><li>캠페인 등록 화면 프로토타입 구현 (Data Studio)</li></ul></dd>
+      </dl>
+    </template>
+    <template id="m-cizion-admin">
+      <p class="pm-company">시지온</p>
+      <h3 class="pm-title">내부 광고 운영 어드민</h3>
+      <p class="pm-meta">백오피스 · 출시 · 기획·운영 100%</p>
+      <dl class="pm-body">
+        <dt>개요</dt><dd>개발팀이 쿼리로 처리하던 광고 운영 이슈를 어드민으로 전환</dd>
+        <dt>한 일</dt><dd><ul class="dot-list"><li>약 1,000개 인벤토리 운영용 CRUD 기능 정의</li><li>기능·컬럼 리스트업, 와이어프레임 작성</li></ul></dd>
+      </dl>
+    </template>
+    <template id="m-cizion-report">
+      <p class="pm-company">시지온</p>
+      <h3 class="pm-title">광고주 데일리 리포트 대시보드</h3>
+      <p class="pm-meta">리포트 화면 · 출시 · 기획 80% · 운영 100%</p>
+      <dl class="pm-body">
+        <dt>개요</dt><dd>엑셀로 주던 광고주 데일리 리포트를 Data Studio 대시보드로 전환</dd>
+        <dt>한 일</dt><dd><ul class="dot-list"><li>캠페인 요약·기간·매체·소재별 데이터 시각화</li></ul></dd>
+      </dl>
+    </template>
+  </div>
+
+  <!-- 맨 위로 버튼: 600px 넘게 내려가면 표시 / 핵심 역량 → 관련 프로젝트 이동 -->
+  <a id="to-top" href="#sec-intro" aria-label="맨 위로">↑</a>
+  <script>
+    (function () {
+      var btn = document.getElementById('to-top');
+      function update() { btn.classList.toggle('is-shown', window.scrollY > 600); }
+      addEventListener('scroll', update, { passive: true });
+      update();
+    })();
+
+    // 라이트/다크 모드 토글 (선택은 이 브라우저에 저장, 전환 시 색이 서서히 바뀜)
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      var root = document.documentElement;
+      var mq = window.matchMedia('(prefers-color-scheme: dark)');
+      var timer;
+      function isDark() { return (root.dataset.theme || (mq.matches ? 'dark' : 'light')) === 'dark'; }
+      function sync() { btn.setAttribute('aria-checked', String(isDark())); }
+      btn.addEventListener('click', function () {
+        var next = isDark() ? 'light' : 'dark';
+        root.classList.add('theme-fading');
+        root.dataset.theme = next;
+        try { localStorage.setItem('theme', next); } catch (e) {}
+        sync();
+        clearTimeout(timer);
+        timer = setTimeout(function () { root.classList.remove('theme-fading'); }, 500);
+      });
+      if (mq.addEventListener) mq.addEventListener('change', sync);
+      sync();
+    })();
+
+    // 그 밖의 프로젝트 칩 클릭 → 요약 모달
+    (function () {
+      var modal = document.getElementById('project-modal');
+      if (!modal || !modal.showModal) return;
+      var body = modal.querySelector('.pm-content');
+      document.querySelectorAll('.chip-btn[data-modal]').forEach(function (chip) {
+        chip.addEventListener('click', function () {
+          var tpl = document.getElementById(chip.dataset.modal);
+          if (!tpl) return;
+          body.innerHTML = '';
+          body.appendChild(tpl.content.cloneNode(true));
+          var title = body.querySelector('.pm-title');
+          if (title) title.id = 'pm-title';
+          modal.showModal();
+        });
+      });
+      modal.querySelector('.pm-close').addEventListener('click', function () { modal.close(); });
+      // 바깥(배경) 클릭 시 닫기
+      modal.addEventListener('click', function (e) {
+        var r = modal.getBoundingClientRect();
+        if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) modal.close();
+      });
+    })();
+
+    // 핵심 역량 설명 클릭 → 관련 프로젝트로 이동하고 해당 카드 모두 강조
+    // 강조는 다시 핵심 역량 섹션으로 돌아올 때까지 유지
+    (function () {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var skills = document.getElementById('sec-skills');
+      var active = [], leftSkills = false;
+
+      function clear() {
+        active.forEach(function (t) { t.classList.remove('is-evidence'); });
+        active = [];
+      }
+
+      new IntersectionObserver(function (entries) {
+        var visible = entries[0].isIntersecting;
+        if (!visible) leftSkills = true;
+        else if (leftSkills && active.length) clear();
+      }).observe(skills);
+
+      document.querySelectorAll('.skill-evidence').forEach(function (el) {
+        var targets = el.dataset.evidence.split(' ').map(function (id) { return document.getElementById(id); }).filter(Boolean);
+        if (!targets.length) return;
+        el.setAttribute('role', 'button');
+        el.setAttribute('tabindex', '0');
+        var hint = document.createElement('span');
+        hint.className = 'evidence-hint';
+        hint.textContent = '관련 프로젝트 ' + targets.length + '개 보기 →';
+        el.appendChild(hint);
+        function go() {
+          clear();
+          leftSkills = false;
+          targets.forEach(function (t) { t.classList.add('is-evidence'); });
+          active = targets;
+          targets[0].scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+        }
+        el.addEventListener('click', go);
+        el.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+      });
+    })();
+  </script>
 
 </body>
 </html>
