@@ -111,6 +111,7 @@
     .intro-eyebrow { font-size: 14px; font-weight: 600; color: var(--accent); margin-bottom: 12px; }
     #intro-name { font-size: 40px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.25; }
     .intro-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+    #intro-credit { display: inline-block; margin-bottom: 28px; padding: 6px 14px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; line-height: 1.5; }
     #intro-photo { flex: none; width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line); }
     #intro-role { margin-top: 8px; font-size: 17px; color: var(--text-sub); }
     #intro-summary { margin-top: 28px; font-size: 18px; line-height: 1.75; max-width: 640px; }
@@ -313,6 +314,7 @@
 
     <!-- ========== S01-intro : 소개 ========== -->
     <section id="sec-intro" data-section="S01-intro">
+      <p id="intro-credit">이 페이지는 Claude와 함께 기획(PRD)부터 디자인·구현까지 진행했습니다.</p>
       <div class="intro-head">
         <div class="intro-head-text">
           <p class="intro-eyebrow">Platform PM · Ad Tech · Targeting</p>
@@ -379,7 +381,7 @@
             <p class="meta meta-role"><span>데이터그로스팀</span><span>플랫폼 PM</span></p>
             <ul class="company-duties">
               <li>타겟팅 플랫폼(CXM · 타겟서비스) 기획 및 운영</li>
-              <li>셀프서브 타겟 빌더 '타겟서비스' 기획, 레거시 CXM 종료·전환 로드맵 수립</li>
+              <li>셀프서브 타겟 빌더 '타겟서비스' 기획, 레거시 타겟 세그먼트 플랫폼 종료 및 신규 플랫폼 전환 로드맵 수립</li>
               <li>자연어 기반 AI 타겟조건 탐색·추천 기능 기획 (개발 중)</li>
               <li>광고 인벤토리 관리 플랫폼 출시·고도화 (인벤토리 규격 JSON Schema 정의), CMS 운영 기획</li>
             </ul>
@@ -402,10 +404,10 @@
                 <dt>한 일</dt>
                 <dd id="career-kakaopay-p01-work">
                   <ul class="dot-list">
-                    <li>서비스 구조·필터 체계·활용 정책 기획, CXM 종료 및 통합 전환 로드맵 수립</li>
-                    <li>상대기간, 람다함수(ANY_MATCH), 리타겟/디타겟, 정렬/랭크 등 복잡한 쿼리 로직을 UI로 제품화</li>
+                    <li>서비스 구조·필터 체계·활용 정책 기획, 레거시 타겟 세그먼트 플랫폼 종료 및 신규 플랫폼 전환 로드맵 수립</li>
+                    <li>상대기간, 람다함수, 리타겟/디타겟, 정렬/랭크 등 복잡한 쿼리 로직을 UI로 제품화</li>
                     <li>동일 테이블 조건 병합, 파티션키 필수화, null guard, 풀스캔 사전 차단 등 쿼리 안전장치 설계</li>
-                    <li>메시지·오퍼 등 활용 플랫폼에 빌더를 임베드하고 목록 추출·다운로드·API 제공</li>
+                    <li>메시지·마케팅 등 적절한 플랫폼에 임베드될 수 있도록 타부서 커뮤니케이션 및 API 설계 제공</li>
                   </ul>
                 </dd>
                 <dt>결과</dt>
@@ -740,7 +742,6 @@
   <!-- ========== S05-footer : 연락처 · 최종 수정일 ========== -->
   <footer id="sec-footer" data-section="S05-footer">
     <div class="wrap">
-      <p id="footer-credit">이 페이지는 Claude와 함께 기획(PRD)부터 디자인·구현까지 진행했습니다.</p>
       <p id="footer-updated">최종 수정 2026.10.01</p>
     </div>
   </footer>
