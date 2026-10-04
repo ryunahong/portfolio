@@ -98,9 +98,11 @@
     }
     #sec-header .wrap { display: flex; align-items: center; justify-content: space-between; height: 56px; gap: 16px; }
     .header-mark { flex: none; font-size: 24px; line-height: 1; }
-    #header-nav ul { display: flex; gap: 24px; }
-    #header-nav a { font-size: 14px; color: var(--text-sub); transition: color .15s; }
-    #header-nav a:hover { color: var(--text); }
+    #header-nav ul { display: flex; gap: 6px; }
+    #header-nav a { display: block; padding: 5px 12px; border-radius: 999px; font-size: 14px; color: var(--text-sub); transition: color .2s, background-color .2s; }
+    #header-nav a:hover { color: var(--text); background: var(--surface); }
+    /* 스크롤 위치에 맞는 메뉴 강조 */
+    #header-nav a.is-active { color: var(--accent); background: var(--accent-soft); font-weight: 600; }
     .nav-short { display: none; }
     /* 라이트/다크 토글 스위치: 동그란 손잡이가 지금 모드 아이콘을 들고 좌(라이트)↔우(다크)로 이동 */
     #theme-toggle {
@@ -353,7 +355,8 @@
       body { font-size: 14.5px; }
       .wrap { padding: 0 16px; }
       /* 모바일: 메뉴를 짧은 이름으로 */
-      #header-nav ul { gap: 18px; }
+      #header-nav ul { gap: 2px; }
+      #header-nav a { padding: 5px 10px; }
       .nav-full { display: none; }
       .nav-short { display: inline; }
       #sec-intro { padding-top: 56px; }
@@ -967,6 +970,29 @@
       var btn = document.getElementById('to-top');
       function update() { btn.classList.toggle('is-shown', window.scrollY > 600); }
       addEventListener('scroll', update, { passive: true });
+      update();
+    })();
+
+    // 상단 메뉴: 지금 보고 있는 섹션 강조
+    (function () {
+      var links = [].slice.call(document.querySelectorAll('#header-nav a'));
+      var sections = ['sec-intro', 'sec-skills', 'sec-career', 'sec-tools']
+        .map(function (id) { return document.getElementById(id); }).filter(Boolean);
+      var ticking = false;
+      function update() {
+        ticking = false;
+        var line = innerHeight * 0.35, current = sections[0];
+        sections.forEach(function (sec) { if (sec.getBoundingClientRect().top <= line) current = sec; });
+        // 맨 아래까지 내리면 마지막 섹션
+        if (innerHeight + scrollY >= document.documentElement.scrollHeight - 2) current = sections[sections.length - 1];
+        links.forEach(function (a) {
+          var on = a.getAttribute('href') === '#' + current.id;
+          a.classList.toggle('is-active', on);
+          if (on) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
+        });
+      }
+      addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+      addEventListener('resize', update);
       update();
     })();
 
