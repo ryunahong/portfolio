@@ -101,6 +101,7 @@
     #header-nav ul { display: flex; gap: 24px; }
     #header-nav a { font-size: 14px; color: var(--text-sub); transition: color .15s; }
     #header-nav a:hover { color: var(--text); }
+    .nav-short { display: none; }
     /* 라이트/다크 토글 스위치: 동그란 손잡이가 지금 모드 아이콘을 들고 좌(라이트)↔우(다크)로 이동 */
     #theme-toggle {
       position: relative; flex: none; width: 56px; height: 30px; padding: 0;
@@ -152,7 +153,7 @@
     .intro-eyebrow { font-size: 14px; font-weight: 600; color: var(--accent); margin-bottom: 12px; }
     #intro-name { font-size: 40px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.25; }
     .intro-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
-    #intro-credit { display: inline-block; margin-bottom: 28px; padding: 6px 14px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; line-height: 1.5; }
+    #intro-credit { display: inline-block; word-break: keep-all; margin-bottom: 28px; padding: 6px 14px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 13px; font-weight: 600; line-height: 1.5; }
     #intro-photo { flex: none; width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 1px solid var(--line); }
     #intro-role { margin-top: 8px; font-size: 17px; color: var(--text-sub); }
     #intro-summary { margin-top: 28px; font-size: 17px; line-height: 1.8; word-break: keep-all; }
@@ -351,7 +352,10 @@
     @media (max-width: 720px) {
       body { font-size: 14.5px; }
       .wrap { padding: 0 16px; }
-      #header-nav { display: none; }
+      /* 모바일: 메뉴를 짧은 이름으로 */
+      #header-nav ul { gap: 18px; }
+      .nav-full { display: none; }
+      .nav-short { display: inline; }
       #sec-intro { padding-top: 56px; }
       #intro-name { font-size: 28px; }
       .intro-head { flex-direction: column-reverse; align-items: flex-start; gap: 16px; }
@@ -400,9 +404,9 @@
       <a href="#sec-intro" class="header-mark" aria-label="홍륜아 · 맨 위로">🌞</a>
       <nav id="header-nav" aria-label="섹션 이동">
         <ul>
-          <li><a href="#sec-skills">핵심 역량</a></li>
-          <li><a href="#sec-career">경력 &amp; 프로젝트</a></li>
-          <li><a href="#sec-tools">스킬 &amp; 툴</a></li>
+          <li><a href="#sec-skills"><span class="nav-full">핵심 역량</span><span class="nav-short">역량</span></a></li>
+          <li><a href="#sec-career"><span class="nav-full">경력 &amp; 프로젝트</span><span class="nav-short">경력</span></a></li>
+          <li><a href="#sec-tools"><span class="nav-full">스킬 &amp; 툴</span><span class="nav-short">스킬</span></a></li>
         </ul>
       </nav>
       <button type="button" id="theme-toggle" role="switch" aria-checked="false" aria-label="다크 모드">
@@ -862,7 +866,7 @@
   <!-- ========== S05-footer : 연락처 · 최종 수정일 ========== -->
   <footer id="sec-footer" data-section="S05-footer">
     <div class="wrap">
-      <p id="footer-updated">최종 수정 2026.10.01</p>
+      <p id="footer-updated">최종 수정 2026.10.05</p>
     </div>
   </footer>
 
